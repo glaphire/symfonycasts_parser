@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use App\Command\ParseCourse;
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -39,4 +40,7 @@ if ($_SERVER['APP_DEBUG']) {
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $application = new Application($kernel);
+
+$application->add(new ParseCourse());
+
 $application->run($input);
