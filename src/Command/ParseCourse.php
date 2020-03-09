@@ -2,26 +2,25 @@
 
 namespace App\Command;
 
-use Goutte\Client;
+use App\Module\SymfonycastsParser\Services\ParserService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ParseCourse extends Command
 {
-    protected static $defaultName = 'app:parse-course';
-    private $dir;
-    private $parserClient;
+    /**
+     * @var ParserService
+     */
+    protected $parserService;
 
-    public function __construct(KernelInterface $kernel, string $name = null)
+    protected static $defaultName = 'app:parse-course';
+
+    public function __construct(ParserService $parserService)
     {
-        $this->dir = $kernel->getProjectDir();
-        $this->parserClient = new Client(HttpClient::createForBaseUri('https://symfonycasts.com/'));
-        parent::__construct($name);
+        $this->parserService = $parserService;
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure()
@@ -35,36 +34,8 @@ class ParseCourse extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $courseUrl = $input->getArgument('course_url');
-        $lessonLinks = $this->parseCoursePage($courseUrl);
-        foreach ($lessonLinks as $link) {
-            $i = 1;
-            $data = $this->parseLessonPage($link);
-            echo "#$i: link: $link, title: {$data['title']}" . PHP_EOL;
-            $i++;
-        }
+        $this->parserService->parseCoursePage($courseUrl);
+
         return 0;
-    }
-
-    private function parseCoursePage($courseUrl)
-    {
-        $crawler = $this->parserClient->request('GET', $courseUrl);
-        $lessonLinks = $crawler
-            ->filter('ul.chapter-list a')
-            ->each(function (Crawler $node) {
-                return $node->link()->getUri();
-            });
-
-        return $lessonLinks;
-    }
-
-    private function parseLessonPage($lessonUrl)
-    {
-        $crawler = $this->parserClient->request('GET', $lessonUrl);
-        $lessonTitle = $crawler->filter('h1')->text();
-
-        //var_dump($lessonTitle);
-        return [
-            'title' => $lessonTitle,
-        ];
     }
 }
