@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06ae70c631456110f07be14843f5a2ea",
+    "content-hash": "169a1abbc258f2f6dece2c38ffd95dcc",
     "packages": [
         {
             "name": "fabpot/goutte",
@@ -1015,7 +1015,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.0.4",
+            "version": "v5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
