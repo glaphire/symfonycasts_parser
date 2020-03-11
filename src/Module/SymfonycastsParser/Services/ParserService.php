@@ -26,16 +26,31 @@ class ParserService
                 return $node->link()->getUri();
             });
 
-        return $lessonLinks;
+        foreach ($lessonLinks as $lessonLink) {
+            $this->parseLessonPage($lessonLink);
+            //TODO: delete break after writing lesson download
+            break;
+        }
+        return true;
     }
 
     public function parseLessonPage($lessonUrl)
     {
         $crawler = $this->parserClient->request('GET', $lessonUrl);
         $lessonTitle = $crawler->filter('h1')->text();
+        $linkToCodeArchive = $crawler->filter('.dropdown-menu a[data-download-type=code]')->attr('href');
+        $linkToVideo = $crawler->filter('.dropdown-menu a[data-download-type=video]')->attr('href');
+        $linkToCourseScript = $crawler->filter('.dropdown-menu a[data-download-type=script]')->attr('href');
+
+//        var_dump($linkToCodeArchive);
+//        var_dump($linkToVideo);
+//        var_dump($linkToCourseScript);
 
         return [
             'title' => $lessonTitle,
+            'linkToCodeArchive' => $linkToCodeArchive,
+            'linkToVideo' => $linkToVideo,
+            'linkToCourseScript' => $linkToCourseScript,
         ];
     }
 }
