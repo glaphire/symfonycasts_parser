@@ -2,7 +2,6 @@
 
 namespace App\Module\SymfonycastsParser\Services\Exceptions;
 
-class ProcessingException
+class ProcessingException extends \Exception
 {
-
 }

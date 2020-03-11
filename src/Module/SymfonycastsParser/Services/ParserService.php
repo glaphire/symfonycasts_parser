@@ -2,24 +2,30 @@
 
 namespace App\Module\SymfonycastsParser\Services;
 
+use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ParserService
 {
-    private $dir;
+    private $filesystem;
+    private $downloadDirAbsPath;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(Filesystem $filesystem, string $downloadDirAbsPath)
     {
-        $this->dir = $kernel->getProjectDir();
+        $this->filesystem = $filesystem;
+        $this->downloadDirAbsPath = $downloadDirAbsPath;
         $this->parserClient = new Client(HttpClient::createForBaseUri('https://symfonycasts.com/'));
     }
 
     public function parseCoursePage($courseUrl)
     {
         $crawler = $this->parserClient->request('GET', $courseUrl);
+        $courseTitle = $crawler->filter('h1')->text();
+        $courseDirName = $this->prepareStringForFilesystem($courseTitle);
+
         $lessonLinks = $crawler
             ->filter('ul.chapter-list a')
             ->each(function (Crawler $node) {
@@ -42,15 +48,20 @@ class ParserService
         $linkToVideo = $crawler->filter('.dropdown-menu a[data-download-type=video]')->attr('href');
         $linkToCourseScript = $crawler->filter('.dropdown-menu a[data-download-type=script]')->attr('href');
 
-//        var_dump($linkToCodeArchive);
-//        var_dump($linkToVideo);
-//        var_dump($linkToCourseScript);
-
         return [
             'title' => $lessonTitle,
             'linkToCodeArchive' => $linkToCodeArchive,
             'linkToVideo' => $linkToVideo,
             'linkToCourseScript' => $linkToCourseScript,
         ];
+    }
+
+    public function prepareStringForFilesystem($string)
+    {
+        if (empty($string)) {
+            throw new ProcessingException('String cannot be empty');
+        }
+        $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
+        return $processedString;
     }
 }
