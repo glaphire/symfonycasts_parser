@@ -1,16 +1,4 @@
 {
-    "fabpot/goutte": {
-        "version": "v4.0.0"
-    },
-    "guzzlehttp/guzzle": {
-        "version": "6.5.2"
-    },
-    "guzzlehttp/promises": {
-        "version": "v1.3.1"
-    },
-    "guzzlehttp/psr7": {
-        "version": "1.6.1"
-    },
     "php": {
         "version": "7.4"
     },
@@ -23,17 +11,8 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
-    "psr/http-message": {
-        "version": "1.0.1"
-    },
     "psr/log": {
         "version": "1.1.2"
-    },
-    "ralouphie/getallheaders": {
-        "version": "3.0.3"
-    },
-    "symfony/browser-kit": {
-        "version": "v5.0.4"
     },
     "symfony/cache": {
         "version": "v5.0.4"
@@ -57,13 +36,7 @@
             "config/bootstrap.php"
         ]
     },
-    "symfony/css-selector": {
-        "version": "v5.0.4"
-    },
     "symfony/dependency-injection": {
-        "version": "v5.0.4"
-    },
-    "symfony/dom-crawler": {
         "version": "v5.0.4"
     },
     "symfony/dotenv": {
@@ -115,12 +88,6 @@
             "src/Controller/.gitignore",
             "src/Kernel.php"
         ]
-    },
-    "symfony/http-client": {
-        "version": "v5.0.4"
-    },
-    "symfony/http-client-contracts": {
-        "version": "v2.0.1"
     },
     "symfony/http-foundation": {
         "version": "v5.0.4"
