@@ -2,6 +2,9 @@
     "php": {
         "version": "7.4"
     },
+    "php-webdriver/webdriver": {
+        "version": "1.8.2"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -13,6 +16,9 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "symfony/browser-kit": {
+        "version": "v5.0.5"
     },
     "symfony/cache": {
         "version": "v5.0.4"
@@ -38,6 +44,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v5.0.4"
+    },
+    "symfony/dom-crawler": {
+        "version": "v5.0.5"
     },
     "symfony/dotenv": {
         "version": "v5.0.4"
@@ -89,6 +98,12 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.0.5"
+    },
+    "symfony/http-client-contracts": {
+        "version": "v2.0.1"
+    },
     "symfony/http-foundation": {
         "version": "v5.0.4"
     },
@@ -98,6 +113,9 @@
     "symfony/mime": {
         "version": "v5.0.4"
     },
+    "symfony/panther": {
+        "version": "v0.7.1"
+    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.14.0"
     },
@@ -106,6 +124,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.14.0"
+    },
+    "symfony/process": {
+        "version": "v5.0.5"
     },
     "symfony/routing": {
         "version": "4.2",
