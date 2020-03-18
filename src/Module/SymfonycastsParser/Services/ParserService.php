@@ -31,6 +31,7 @@ class ParserService
             "download.directory_upgrade" => true,
             "safebrowsing.enabled" => true,
             "download.default_directory" => $currentDownloadDirAbsPath,
+            "plugins.always_open_pdf_externally" => true,
         ]);
 
         $caps = DesiredCapabilities::chrome();
@@ -63,31 +64,21 @@ class ParserService
     private function parseLessonPage($lessonPageUrl)
     {
         $lessonPage = $this->webdriver->get($lessonPageUrl);
-        $downloadDropdownButtonSelector = WebDriverBy::cssSelector('#downloadDropdown');
-        $downloadDropdownListSelector = WebDriverBy::cssSelector('.dropdown-menu.show');
 
-        $this->webdriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable($downloadDropdownButtonSelector)
-        );
+        $this->waitToBeClickable('#downloadDropdown');
+        $this->click('#downloadDropdown');
+        $this->waitToBeClickable('.dropdown-menu.show');
+        $this->click('.dropdown-menu a[data-download-type=code]');
+        $this->click('#downloadDropdown');
+        $this->waitToBeClickable('.dropdown-menu.show');
+        $this->click('.dropdown-menu a[data-download-type=script]');
+        $this->click('#downloadDropdown');
+        $this->waitToBeClickable('.dropdown-menu.show');
+        $this->click('.dropdown-menu a[data-download-type=video]');
 
-        $this
-            ->webdriver
-            ->findElement($downloadDropdownButtonSelector)
-            ->click();
-
-        $this->webdriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable($downloadDropdownListSelector)
-        );
-
-        $this
-            ->webdriver
-            ->findElement(WebDriverBy::cssSelector('.dropdown-menu a[data-download-type=code]'))
-            ->click();
-//        do {
-//
-//        } while ();
+        //example of waiting for download in python
         /*
-         * do {
+        do {
 
         filesize1 = f.length();  // check file size
         Thread.sleep(5000);      // wait for 5 seconds
@@ -95,14 +86,8 @@ class ParserService
 
         } while (length2 != length1);
          */
-       // sleep(15);
+
         //$this->webdriver->close();
-
-//        $linkToCodeArchive = $crawler->filter('.dropdown-menu a[data-download-type=code]')->attr('href');
-//        $linkToVideo = $crawler->filter('.dropdown-menu a[data-download-type=video]')->attr('href');
-//        $linkToCourseScript = $crawler->filter('.dropdown-menu a[data-download-type=script]')->attr('href');
-  //      $this->browserClient->click($linkToCodeArchive);
-
     }
 
     private function prepareStringForFilesystem(string $string)
@@ -120,5 +105,22 @@ class ParserService
         $this->courseFolderAbsPath = $this->downloadDirAbsPath . '/' . $preparedCourseName;
         //TODO: move to separate method
         $this->filesystem->mkdir($this->courseFolderAbsPath);
+    }
+
+    private function click(string $cssSelector)
+    {
+        $selectorObject = WebDriverBy::cssSelector($cssSelector);
+        $this
+            ->webdriver
+            ->findElement($selectorObject)
+            ->click();
+    }
+
+    private function waitToBeClickable(string $cssSelector)
+    {
+        $selectorObject = WebDriverBy::cssSelector($cssSelector);
+        $this->webdriver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable($selectorObject)
+        );
     }
 }
