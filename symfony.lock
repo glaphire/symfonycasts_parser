@@ -2,6 +2,9 @@
     "php": {
         "version": "7.4"
     },
+    "php-webdriver/webdriver": {
+        "version": "1.8.2"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -106,6 +109,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.14.0"
+    },
+    "symfony/process": {
+        "version": "v5.0.5"
     },
     "symfony/routing": {
         "version": "4.2",

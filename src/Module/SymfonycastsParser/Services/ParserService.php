@@ -3,44 +3,54 @@
 namespace App\Module\SymfonycastsParser\Services;
 
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Panther\Client;
-use Symfony\Component\Panther\DomCrawler\Crawler;
-use Symfony\Component\Panther\ProcessManager\ChromeManager;
 
 class ParserService
 {
     private $filesystem;
     private $downloadDirAbsPath;
-    private $browserClient;
+    private $webdriver;
     private $courseFolderAbsPath = null;
 
     public function __construct(Filesystem $filesystem, string $downloadDirAbsPath)
     {
         $this->filesystem = $filesystem;
         $this->downloadDirAbsPath = $downloadDirAbsPath;
+        $currentDownloadDirAbsPath = $this->downloadDirAbsPath . '/current_download_dir';
+        $this->filesystem->mkdir($currentDownloadDirAbsPath);
+        $host = 'http://localhost:4444';
+        $options = new ChromeOptions();
+        $options->setExperimentalOption("prefs", [
+            "download.prompt_for_download" => false,
+            "download.directory_upgrade" => true,
+            "safebrowsing.enabled" => true,
+            "download.default_directory" => $currentDownloadDirAbsPath,
+        ]);
 
-        //$this->browserClient =  Client::createChromeClient(null, null, ['download.default_directory'=>'/home/dariia/Music']);
-        $this->browserClient =  Client::createChromeClient(null, null, ['download.default_directory'=>'/home/dariia/my_scripts']);
+        $caps = DesiredCapabilities::chrome();
+        $caps->setCapability(ChromeOptions::CAPABILITY, $options);
+        $this->webdriver = RemoteWebDriver::create($host, $caps);
     }
 
     public function parseCoursePage($courseUrl)
     {
-        $crawler = $this->browserClient->request('GET', $courseUrl);
-        $this->browserClient->manage()->window()->maximize();
-        $courseTitle = $crawler->filter('h1')->text();
-        $this->setCourseFolderAbsPath($courseTitle);
+        $coursePage = $this->webdriver->get($courseUrl);
+        $courseTitleSelector = WebDriverBy::cssSelector('h1');
+        $lessonUrlSelector = WebDriverBy::cssSelector('ul.chapter-list a');
 
-        $lessonPageUrls = $crawler
-            ->filter('ul.chapter-list a')
-            ->each(function (Crawler $node) {
-                return $node->link();//->getUri();
-            });
-
-        foreach ($lessonPageUrls as $lessonPageUrl) {
-            //var_dump($lessonLink);
+        $courseTitleText = $coursePage->findElement($courseTitleSelector)->getText();
+        /**
+         * @RemoteWebElement[]
+         */
+        $lessonUrlElements = $coursePage->findElements($lessonUrlSelector);
+        foreach ($lessonUrlElements as $lessonUrlElement) {
+            $lessonPageUrl = $lessonUrlElement->getAttribute('href');
             $this->parseLessonPage($lessonPageUrl);
 
             //TODO: delete break after writing lesson download
@@ -52,34 +62,47 @@ class ParserService
 
     private function parseLessonPage($lessonPageUrl)
     {
-        $this->browserClient->click($lessonPageUrl);
+        $lessonPage = $this->webdriver->get($lessonPageUrl);
         $downloadDropdownButtonSelector = WebDriverBy::cssSelector('#downloadDropdown');
         $downloadDropdownListSelector = WebDriverBy::cssSelector('.dropdown-menu.show');
 
-        $this->browserClient->wait()->until(
+        $this->webdriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable($downloadDropdownButtonSelector)
         );
 
         $this
-            ->browserClient
+            ->webdriver
             ->findElement($downloadDropdownButtonSelector)
             ->click();
 
-        $this->browserClient->wait()->until(
+        $this->webdriver->wait()->until(
             WebDriverExpectedCondition::elementToBeClickable($downloadDropdownListSelector)
         );
 
         $this
-            ->browserClient
+            ->webdriver
             ->findElement(WebDriverBy::cssSelector('.dropdown-menu a[data-download-type=code]'))
             ->click();
-        //var_dump($select);
+//        do {
+//
+//        } while ();
+        /*
+         * do {
+
+        filesize1 = f.length();  // check file size
+        Thread.sleep(5000);      // wait for 5 seconds
+        filesize2 = f.length();  // check file size again
+
+        } while (length2 != length1);
+         */
+       // sleep(15);
+        //$this->webdriver->close();
 
 //        $linkToCodeArchive = $crawler->filter('.dropdown-menu a[data-download-type=code]')->attr('href');
 //        $linkToVideo = $crawler->filter('.dropdown-menu a[data-download-type=video]')->attr('href');
 //        $linkToCourseScript = $crawler->filter('.dropdown-menu a[data-download-type=script]')->attr('href');
   //      $this->browserClient->click($linkToCodeArchive);
-        sleep(5);
+
     }
 
     private function prepareStringForFilesystem(string $string)
