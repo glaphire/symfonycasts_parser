@@ -36,6 +36,8 @@ class ParserService
         $caps = DesiredCapabilities::chrome();
         $caps->setCapability(ChromeOptions::CAPABILITY, $options);
         $this->webdriver = RemoteWebDriver::create($host, $caps);
+
+        $this->login('login','pass');
     }
 
     public function parseCoursePage($courseUrl)
@@ -140,4 +142,15 @@ class ParserService
         } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }
 
+    private function login($login, $password)
+    {
+        $this->webdriver->get('https://symfonycasts.com/login');
+        $this->waitToBeClickable('#email');
+        $this->click('#email');
+        $this->webdriver->getKeyboard()->sendKeys($login);
+        $this->waitToBeClickable('#password');
+        $this->click('#password');
+        $this->webdriver->getKeyboard()->sendKeys($password);
+        $this->click('#_submit');
+    }
 }
