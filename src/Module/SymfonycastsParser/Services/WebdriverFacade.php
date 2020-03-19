@@ -51,12 +51,18 @@ class WebdriverFacade
 
     public function openUrl(string $url)
     {
-        return $this->webdriver->get($url);
+        $this->webdriver = $this->webdriver->get($url);
+        return $this->webdriver;
     }
 
     public function findOne($cssSelector)
     {
         return $this->webdriver->findElement(WebDriverBy::cssSelector($cssSelector));
+    }
+
+    public function findAll($cssSelector)
+    {
+        return $this->webdriver->findElements(WebDriverBy::cssSelector($cssSelector));
     }
 
     public function fillInput(string $cssSelector, string $text)

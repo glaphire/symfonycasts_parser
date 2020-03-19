@@ -3,8 +3,6 @@
 namespace App\Module\SymfonycastsParser\Services;
 
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
-use Facebook\WebDriver\Remote\RemoteWebElement;
-use Facebook\WebDriver\WebDriverBy;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
@@ -27,17 +25,10 @@ class ParserService
 
     public function parseCoursePage($courseUrl)
     {
-        $coursePage = $this->webdriver->openUrl($courseUrl);
-        $courseTitleSelector = WebDriverBy::cssSelector('h1');
-        $lessonUrlSelector = WebDriverBy::cssSelector('ul.chapter-list a');
-
-        $courseTitleText = $coursePage->findElement($courseTitleSelector)->getText();
-
-        /**
-         * @RemoteWebElement[]
-         */
-        $lessonUrlElements = $coursePage->findElements($lessonUrlSelector);
         $lessonPageUrls = [];
+        $this->webdriver->openUrl($courseUrl);
+        $courseTitleText = $this->webdriver->findOne('h1')->getText();
+        $lessonUrlElements = $this->webdriver->findAll('ul.chapter-list a');
 
         foreach ($lessonUrlElements as $lessonUrlElement) {
             $lessonPageUrls[] = $lessonUrlElement->getAttribute('href');
