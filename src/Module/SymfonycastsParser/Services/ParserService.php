@@ -3,12 +3,8 @@
 namespace App\Module\SymfonycastsParser\Services;
 
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
-use Facebook\WebDriver\Chrome\ChromeOptions;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverExpectedCondition;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
@@ -24,25 +20,14 @@ class ParserService
         $currentDownloadDirAbsPath = $this->downloadDirAbsPath . '/current_download_dir';
         $this->filesystem->mkdir($currentDownloadDirAbsPath);
         $host = 'http://localhost:4444';
-        $options = new ChromeOptions();
-        $options->setExperimentalOption("prefs", [
-            "download.prompt_for_download" => false,
-            "download.directory_upgrade" => true,
-            "safebrowsing.enabled" => true,
-            "download.default_directory" => $currentDownloadDirAbsPath,
-            "plugins.always_open_pdf_externally" => true,
-        ]);
-
-        $caps = DesiredCapabilities::chrome();
-        $caps->setCapability(ChromeOptions::CAPABILITY, $options);
-        $this->webdriver = RemoteWebDriver::create($host, $caps);
+        $this->webdriver = new WebdriverFacade($host, $currentDownloadDirAbsPath);
 
         $this->login($smfCastsLogin, $smfCastsPassword);
     }
 
     public function parseCoursePage($courseUrl)
     {
-        $coursePage = $this->webdriver->get($courseUrl);
+        $coursePage = $this->webdriver->openUrl($courseUrl);
         $courseTitleSelector = WebDriverBy::cssSelector('h1');
         $lessonUrlSelector = WebDriverBy::cssSelector('ul.chapter-list a');
 
@@ -79,7 +64,7 @@ class ParserService
         $parseScriptFlag = false,
         $parseCodeArchiveFlag = false
     ) {
-        $this->webdriver->get($lessonPageUrl);
+        $this->webdriver->openUrl($lessonPageUrl);
 
         if ($parseVideoFlag) {
             $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=video]');
@@ -103,29 +88,12 @@ class ParserService
         return $processedString;
     }
 
-    private function click(string $cssSelector)
-    {
-        $selectorObject = WebDriverBy::cssSelector($cssSelector);
-        $this
-            ->webdriver
-            ->findElement($selectorObject)
-            ->click();
-    }
-
-    private function waitToBeClickable(string $cssSelector)
-    {
-        $selectorObject = WebDriverBy::cssSelector($cssSelector);
-        $this->webdriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable($selectorObject)
-        );
-    }
-
     private function clickDropdownOptionAndDownload(string $cssSelector)
     {
-        $this->waitToBeClickable('#downloadDropdown');
-        $this->click('#downloadDropdown');
-        $this->waitToBeClickable('.dropdown-menu.show');
-        $this->click($cssSelector);
+        $this->webdriver->waitToBeClickable('#downloadDropdown');
+        $this->webdriver->click('#downloadDropdown');
+        $this->webdriver->waitToBeClickable('.dropdown-menu.show');
+        $this->webdriver->click($cssSelector);
     }
 
     private function searchUnfinishedDownloadingFiles()
@@ -144,13 +112,9 @@ class ParserService
 
     private function login($login, $password)
     {
-        $this->webdriver->get('https://symfonycasts.com/login');
-        $this->waitToBeClickable('#email');
-        $this->click('#email');
-        $this->webdriver->getKeyboard()->sendKeys($login);
-        $this->waitToBeClickable('#password');
-        $this->click('#password');
-        $this->webdriver->getKeyboard()->sendKeys($password);
-        $this->click('#_submit');
+        $this->webdriver->openUrl('https://symfonycasts.com/login');
+        $this->webdriver->fillInput('#email', $login);
+        $this->webdriver->fillInput('#password', $password);
+        $this->webdriver->click('#_submit');
     }
 }

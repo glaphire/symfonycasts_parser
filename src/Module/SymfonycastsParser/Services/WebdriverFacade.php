@@ -8,7 +8,7 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
-class WebdriverWrapper
+class WebdriverFacade
 {
     private $webdriver;
 
@@ -47,5 +47,21 @@ class WebdriverWrapper
     {
         $this->waitToBeClickable($cssSelector);
         $this->click($cssSelector);
+    }
+
+    public function openUrl(string $url)
+    {
+        return $this->webdriver->get($url);
+    }
+
+    public function findOne($cssSelector)
+    {
+        return $this->webdriver->findElement(WebDriverBy::cssSelector($cssSelector));
+    }
+
+    public function fillInput(string $cssSelector, string $text)
+    {
+        $this->waitAndClick($cssSelector);
+        $this->webdriver->getKeyboard()->sendKeys($text);
     }
 }
