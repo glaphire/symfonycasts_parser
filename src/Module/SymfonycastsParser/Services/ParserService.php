@@ -46,37 +46,51 @@ class ParserService
         $lessonUrlSelector = WebDriverBy::cssSelector('ul.chapter-list a');
 
         $courseTitleText = $coursePage->findElement($courseTitleSelector)->getText();
+
         /**
          * @RemoteWebElement[]
          */
         $lessonUrlElements = $coursePage->findElements($lessonUrlSelector);
+        $lessonPageUrls = [];
+
         foreach ($lessonUrlElements as $lessonUrlElement) {
-            $lessonPageUrl = $lessonUrlElement->getAttribute('href');
-            $this->parseLessonPage($lessonPageUrl);
-
-            //TODO: delete break after writing lesson download
-            break;
+            $lessonPageUrls[] = $lessonUrlElement->getAttribute('href');
         }
-        return true;
 
+        foreach ($lessonPageUrls as $index => $lessonPageUrl) {
+            if ($index > 0) {
+                $this->parseLessonPage($lessonPageUrl, true);
+            } else {
+                $this->parseLessonPage($lessonPageUrl, true, true, true);
+            }
+        }
+
+        $olddir = $this->downloadDirAbsPath . '/current_download_dir';
+        $newdir = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
+        $this->filesystem->rename($olddir, $newdir);
+        $this->webdriver->close();
+        return true;
     }
 
-    private function parseLessonPage($lessonPageUrl)
-    {
+    private function parseLessonPage(
+        $lessonPageUrl,
+        $parseVideoFlag = true,
+        $parseScriptFlag = false,
+        $parseCodeArchiveFlag = false
+    ) {
         $lessonPage = $this->webdriver->get($lessonPageUrl);
 
-        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=code]');
-        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=script]');
-        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=video]');
+        if ($parseVideoFlag) {
+            $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=video]');
+        }
+        if ($parseScriptFlag) {
+            $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=script]');
+        }
+        if ($parseCodeArchiveFlag) {
+            $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=code]');
+        }
 
-        do {
-            echo "\n=======\n";
-            var_dump($this->searchUnfinishedDownloadingFiles());
-            echo strtotime("now") . PHP_EOL;
-            sleep(3);
-        } while (!empty($this->searchUnfinishedDownloadingFiles()));
-
-        $this->webdriver->close();
+        $this->waitFilesToDownload();
     }
 
     private function prepareStringForFilesystem(string $string)
@@ -93,7 +107,7 @@ class ParserService
         $preparedCourseName = $this->prepareStringForFilesystem($courseTitle);
         $this->courseFolderAbsPath = $this->downloadDirAbsPath . '/' . $preparedCourseName;
         //TODO: move to separate method
-        $this->filesystem->mkdir($this->courseFolderAbsPath);
+        //$this->filesystem->mkdir($this->courseFolderAbsPath);
     }
 
     private function click(string $cssSelector)
@@ -124,6 +138,15 @@ class ParserService
     private function searchUnfinishedDownloadingFiles()
     {
         return glob($this->downloadDirAbsPath . '/current_download_dir/*.crdownload');
+    }
+
+    private function waitFilesToDownload()
+    {
+        do {
+            var_dump($this->searchUnfinishedDownloadingFiles());
+            echo date('H:i:s') . PHP_EOL;
+            sleep(5);
+        } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }
 
 }
