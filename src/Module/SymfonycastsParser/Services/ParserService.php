@@ -17,7 +17,7 @@ class ParserService
     private $downloadDirAbsPath;
     private $webdriver;
 
-    public function __construct(Filesystem $filesystem, string $downloadDirAbsPath)
+    public function __construct(Filesystem $filesystem, string $downloadDirAbsPath, string $smfCastsLogin, string $smfCastsPassword)
     {
         $this->filesystem = $filesystem;
         $this->downloadDirAbsPath = $downloadDirAbsPath;
@@ -37,7 +37,7 @@ class ParserService
         $caps->setCapability(ChromeOptions::CAPABILITY, $options);
         $this->webdriver = RemoteWebDriver::create($host, $caps);
 
-        $this->login('login','pass');
+        $this->login($smfCastsLogin, $smfCastsPassword);
     }
 
     public function parseCoursePage($courseUrl)

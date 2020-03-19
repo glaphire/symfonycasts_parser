@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     downloadDirAbsPath: '%env(DOWNLOAD_DIR_ABS_PATH)%'
+    smfCastsLogin: '%env(SYMFONYCASTS_LOGIN)%'
+    smfCastsPassword:  '%env(SYMFONYCASTS_PASSWORD)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,5 +27,7 @@ services:
     App\Module\SymfonycastsParser\Services\ParserService:
         arguments:
             $downloadDirAbsPath: '%downloadDirAbsPath%'
+            $smfCastsLogin: '%smfCastsLogin%'
+            $smfCastsPassword: '%smfCastsPassword%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
