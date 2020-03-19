@@ -65,29 +65,18 @@ class ParserService
     {
         $lessonPage = $this->webdriver->get($lessonPageUrl);
 
-        $this->waitToBeClickable('#downloadDropdown');
-        $this->click('#downloadDropdown');
-        $this->waitToBeClickable('.dropdown-menu.show');
-        $this->click('.dropdown-menu a[data-download-type=code]');
-        $this->click('#downloadDropdown');
-        $this->waitToBeClickable('.dropdown-menu.show');
-        $this->click('.dropdown-menu a[data-download-type=script]');
-        $this->click('#downloadDropdown');
-        $this->waitToBeClickable('.dropdown-menu.show');
-        $this->click('.dropdown-menu a[data-download-type=video]');
+        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=code]');
+        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=script]');
+        $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=video]');
 
-        //example of waiting for download in python
-        /*
         do {
+            echo "\n=======\n";
+            var_dump($this->searchUnfinishedDownloadingFiles());
+            echo strtotime("now") . PHP_EOL;
+            sleep(3);
+        } while (!empty($this->searchUnfinishedDownloadingFiles()));
 
-        filesize1 = f.length();  // check file size
-        Thread.sleep(5000);      // wait for 5 seconds
-        filesize2 = f.length();  // check file size again
-
-        } while (length2 != length1);
-         */
-
-        //$this->webdriver->close();
+        $this->webdriver->close();
     }
 
     private function prepareStringForFilesystem(string $string)
@@ -123,4 +112,18 @@ class ParserService
             WebDriverExpectedCondition::elementToBeClickable($selectorObject)
         );
     }
+
+    private function clickDropdownOptionAndDownload(string $cssSelector)
+    {
+        $this->waitToBeClickable('#downloadDropdown');
+        $this->click('#downloadDropdown');
+        $this->waitToBeClickable('.dropdown-menu.show');
+        $this->click($cssSelector);
+    }
+
+    private function searchUnfinishedDownloadingFiles()
+    {
+        return glob($this->downloadDirAbsPath . '/current_download_dir/*.crdownload');
+    }
+
 }
