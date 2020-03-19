@@ -16,7 +16,6 @@ class ParserService
     private $filesystem;
     private $downloadDirAbsPath;
     private $webdriver;
-    private $courseFolderAbsPath = null;
 
     public function __construct(Filesystem $filesystem, string $downloadDirAbsPath)
     {
@@ -78,7 +77,7 @@ class ParserService
         $parseScriptFlag = false,
         $parseCodeArchiveFlag = false
     ) {
-        $lessonPage = $this->webdriver->get($lessonPageUrl);
+        $this->webdriver->get($lessonPageUrl);
 
         if ($parseVideoFlag) {
             $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=video]');
@@ -100,14 +99,6 @@ class ParserService
         }
         $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
         return $processedString;
-    }
-
-    private function setCourseFolderAbsPath($courseTitle)
-    {
-        $preparedCourseName = $this->prepareStringForFilesystem($courseTitle);
-        $this->courseFolderAbsPath = $this->downloadDirAbsPath . '/' . $preparedCourseName;
-        //TODO: move to separate method
-        //$this->filesystem->mkdir($this->courseFolderAbsPath);
     }
 
     private function click(string $cssSelector)
