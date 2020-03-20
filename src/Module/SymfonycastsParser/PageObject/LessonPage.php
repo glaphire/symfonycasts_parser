@@ -8,6 +8,9 @@ class LessonPage extends BasePageObject
     public const SCRIPT_URL = '.dropdown-menu a[data-download-type=code]';
     public const CODE_ARCHIVE_URL = '.dropdown-menu a[data-download-type=code]';
 
+    public const DOWNLOAD_MENU_BUTTON = '#downloadDropdown';
+    public const DOWNLOAD_MENU_LIST = '.dropdown-menu.show';
+
     public function parseLessonPage(
         $lessonPageUrl,
         $parseVideoFlag = true,
@@ -23,7 +26,7 @@ class LessonPage extends BasePageObject
             $this->clickDropdownOptionAndDownload(self::SCRIPT_URL);
         }
         if ($parseCodeArchiveFlag) {
-            $this->clickDropdownOptionAndDownload('.dropdown-menu a[data-download-type=code]');
+            $this->clickDropdownOptionAndDownload(self::CODE_ARCHIVE_URL);
         }
 
         $this->webdriver->waitFilesToDownload();
@@ -31,9 +34,8 @@ class LessonPage extends BasePageObject
 
     protected function clickDropdownOptionAndDownload(string $cssSelector)
     {
-        $this->webdriver->waitToBeClickable('#downloadDropdown');
-        $this->webdriver->click('#downloadDropdown');
-        $this->webdriver->waitToBeClickable('.dropdown-menu.show');
+        $this->webdriver->waitAndClick(self::DOWNLOAD_MENU_BUTTON);
+        $this->webdriver->waitToBeClickable(self::DOWNLOAD_MENU_LIST);
         $this->webdriver->click($cssSelector);
     }
 }

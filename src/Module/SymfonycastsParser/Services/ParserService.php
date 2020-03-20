@@ -44,12 +44,9 @@ class ParserService
         foreach ($lessonPageUrls as $index => $lessonPageUrl) {
             $lessonPage = new LessonPage($this->webdriver);
             if ($index > 0) {
-
                 $lessonPage->parseLessonPage($lessonPageUrl, true);
-                //$this->parseLessonPage($lessonPageUrl, true);
             } else {
                 $lessonPage->parseLessonPage($lessonPageUrl, true, true, true);
-               // $this->parseLessonPage($lessonPageUrl, true, true, true);
             }
         }
 
@@ -67,14 +64,6 @@ class ParserService
         }
         $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
         return $processedString;
-    }
-
-    private function clickDropdownOptionAndDownload(string $cssSelector)
-    {
-        $this->webdriver->waitToBeClickable('#downloadDropdown');
-        $this->webdriver->click('#downloadDropdown');
-        $this->webdriver->waitToBeClickable('.dropdown-menu.show');
-        $this->webdriver->click($cssSelector);
     }
 
     private function login($login, $password)
