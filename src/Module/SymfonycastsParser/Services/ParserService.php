@@ -41,13 +41,15 @@ class ParserService
             $lessonPageUrls[] = $lessonUrlElement->getAttribute('href');
         }
 
-        foreach ($lessonPageUrls as $index => $lessonPageUrl) {
-            $lessonPage = new LessonPage($this->webdriver);
-            if ($index > 0) {
-                $lessonPage->parseLessonPage($lessonPageUrl, true);
-            } else {
-                $lessonPage->parseLessonPage($lessonPageUrl, true, true, true);
+        foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
+            $lessonPage = new LessonPage($this->webdriver, $lessonPageUrl);
+
+            if ($lessonNumber == 0) {
+                $lessonPage->downloadCourseCodeArchive();
+                $lessonPage->downloadCourseScript();
             }
+
+            $lessonPage->downloadVideo();
         }
 
         $olddir = $this->downloadDirAbsPath . '/current_download_dir';
