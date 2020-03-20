@@ -4,8 +4,8 @@ namespace App\Module\SymfonycastsParser\Services;
 
 use App\Module\SymfonycastsParser\PageObject\CoursePage;
 use App\Module\SymfonycastsParser\PageObject\LessonPage;
+use App\Module\SymfonycastsParser\PageObject\LoginPage;
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
-use Facebook\WebDriver\Exception\NoSuchElementException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
@@ -29,11 +29,8 @@ class ParserService
 
     public function parseCoursePage($courseUrl)
     {
-        $this->webdriver->openUrl($courseUrl);
-        if(!$this->isAuthorized()) {
-            $this->login($this->smfCastsLogin, $this->smfCastsPassword);
-            $this->webdriver->openUrl($courseUrl);
-        }
+        $loginPage = new LoginPage($this->webdriver, $this->smfCastsLogin, $this->smfCastsPassword);
+        $loginPage->login();
 
         $coursePage = new CoursePage($this->webdriver, $courseUrl);
 
@@ -65,24 +62,5 @@ class ParserService
         }
         $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
         return $processedString;
-    }
-
-    private function login($login, $password)
-    {
-        $this->webdriver->openUrl('https://symfonycasts.com/login');
-        $this->webdriver->fillInput('#email', $login);
-        $this->webdriver->fillInput('#password', $password);
-        $this->webdriver->click('#_submit');
-    }
-
-    private function isAuthorized()
-    {
-        try {
-            $this->webdriver->waitToBeClickable('.navbar');
-            $this->webdriver->findOne('a[title*="Account Menu"]');
-            return true;
-        } catch (NoSuchElementException $e) {
-            return false;
-        }
     }
 }
