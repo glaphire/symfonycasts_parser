@@ -7,6 +7,7 @@ parameters:
     downloadDirAbsPath: '%env(DOWNLOAD_DIR_ABS_PATH)%'
     smfCastsLogin: '%env(SYMFONYCASTS_LOGIN)%'
     smfCastsPassword:  '%env(SYMFONYCASTS_PASSWORD)%'
+    profileDirectoryAbsPath: '%env(PROFILE_DIRECTORY_ABS_PATH)%'
 
 services:
     # default configuration for services in *this* file
@@ -29,5 +30,10 @@ services:
             $downloadDirAbsPath: '%downloadDirAbsPath%'
             $smfCastsLogin: '%smfCastsLogin%'
             $smfCastsPassword: '%smfCastsPassword%'
+    App\Module\SymfonycastsParser\Services\WebdriverFacade:
+        arguments:
+            $host: 'http://localhost:4444'
+            $downloadDirAbsPath: '%downloadDirAbsPath%'
+            $profileDirectoryAbsPath: '%profileDirectoryAbsPath%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

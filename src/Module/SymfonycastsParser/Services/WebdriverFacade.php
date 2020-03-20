@@ -11,10 +11,18 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class WebdriverFacade
 {
     private $webdriver;
+    private $downloadDefaultDirectoryAbsPath;
 
-    public function __construct(string $host, string $downloadDefaultDirectoryAbsPath)
+    public function __construct(string $host, string $downloadDirAbsPath, string $profileDirectoryAbsPath)
     {
         $options = new ChromeOptions();
+
+        $options->addArguments([
+            "--user-data-dir=$profileDirectoryAbsPath",
+        ]);
+
+        $downloadDefaultDirectoryAbsPath = $downloadDirAbsPath . "/current_download_dir";
+
         $options->setExperimentalOption("prefs", [
             "download.prompt_for_download" => false,
             "download.directory_upgrade" => true,
@@ -69,5 +77,19 @@ class WebdriverFacade
     {
         $this->waitAndClick($cssSelector);
         $this->webdriver->getKeyboard()->sendKeys($text);
+    }
+
+    private function searchUnfinishedDownloadingFiles()
+    {
+        return glob($this->downloadDefaultDirectoryAbsPath . '/current_download_dir/*.crdownload');
+    }
+
+    public function waitFilesToDownload()
+    {
+        do {
+            var_dump($this->searchUnfinishedDownloadingFiles());
+            echo date('H:i:s') . PHP_EOL;
+            sleep(5);
+        } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }
 }
