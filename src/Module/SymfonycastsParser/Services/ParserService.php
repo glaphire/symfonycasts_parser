@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class ParserService
 {
     private $filesystem;
+    private $temporaryDownloadDirPath;
     private $downloadDirAbsPath;
     private $webdriver;
     private $smfCastsLogin;
@@ -20,9 +21,11 @@ class ParserService
     {
         $this->filesystem = $filesystem;
         $this->downloadDirAbsPath = $downloadDirAbsPath;
-        $currentDownloadDirAbsPath = $this->downloadDirAbsPath . '/current_download_dir';
-        $this->filesystem->mkdir($currentDownloadDirAbsPath);
+
         $this->webdriver = $webdriver;
+        $this->temporaryDownloadDirPath = $this->webdriver->getDownloadDirectoryAbsPath();
+        $this->filesystem->mkdir($this->temporaryDownloadDirPath);
+
         $this->smfCastsLogin = $smfCastsLogin;
         $this->smfCastsPassword = $smfCastsPassword;
     }
@@ -48,9 +51,8 @@ class ParserService
             $lessonPage->downloadVideo();
         }
 
-        $olddir = $this->downloadDirAbsPath . '/current_download_dir';
-        $newdir = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
-        $this->filesystem->rename($olddir, $newdir);
+        $courseDirPath = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
+        $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
         //$this->webdriver->close();
         return true;
     }

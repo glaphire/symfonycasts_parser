@@ -11,23 +11,23 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class WebdriverFacade
 {
     private $webdriver;
-    private $downloadDefaultDirectoryAbsPath;
+    private $downloadDirectoryAbsPath;
 
-    public function __construct(string $host, string $downloadDirAbsPath, string $profileDirectoryAbsPath)
+    public function __construct(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
     {
         $options = new ChromeOptions();
 
         $options->addArguments([
-            "--user-data-dir=$profileDirectoryAbsPath",
+            "--user-data-dir=$profileDirAbsPath",
         ]);
 
-        $downloadDefaultDirectoryAbsPath = $downloadDirAbsPath . "/current_download_dir";
+        $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
 
         $options->setExperimentalOption("prefs", [
             "download.prompt_for_download" => false,
             "download.directory_upgrade" => true,
             "safebrowsing.enabled" => true,
-            "download.default_directory" => $downloadDefaultDirectoryAbsPath,
+            "download.default_directory" => $this->downloadDirectoryAbsPath,
             "plugins.always_open_pdf_externally" => true,
         ]);
 
@@ -81,7 +81,7 @@ class WebdriverFacade
 
     private function searchUnfinishedDownloadingFiles()
     {
-        return glob($this->downloadDefaultDirectoryAbsPath . '/current_download_dir/*.crdownload');
+        return glob($this->downloadDirectoryAbsPath . '/*.crdownload');
     }
 
     public function waitFilesToDownload()
@@ -91,5 +91,10 @@ class WebdriverFacade
             echo date('H:i:s') . PHP_EOL;
             sleep(5);
         } while (!empty($this->searchUnfinishedDownloadingFiles()));
+    }
+
+    public function getDownloadDirectoryAbsPath()
+    {
+        return $this->downloadDirectoryAbsPath;
     }
 }

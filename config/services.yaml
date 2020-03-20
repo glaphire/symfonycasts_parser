@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     downloadDirAbsPath: '%env(DOWNLOAD_DIR_ABS_PATH)%'
+    temporaryDownloadDirName: '%env(TEMP_DOWNLOAD_DIR_NAME)%'
     smfCastsLogin: '%env(SYMFONYCASTS_LOGIN)%'
     smfCastsPassword:  '%env(SYMFONYCASTS_PASSWORD)%'
     profileDirectoryAbsPath: '%env(PROFILE_DIRECTORY_ABS_PATH)%'
@@ -33,7 +34,7 @@ services:
     App\Module\SymfonycastsParser\Services\WebdriverFacade:
         arguments:
             $host: 'http://localhost:4444'
-            $downloadDirAbsPath: '%downloadDirAbsPath%'
-            $profileDirectoryAbsPath: '%profileDirectoryAbsPath%'
+            $downloadDirAbsPath: '%temporaryDownloadDirName%'
+            $profileDirAbsPath: '%profileDirectoryAbsPath%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
