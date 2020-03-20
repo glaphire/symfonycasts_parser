@@ -2,6 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\Services;
 
+use App\Module\SymfonycastsParser\PageObject\CoursePage;
 use App\Module\SymfonycastsParser\PageObject\LessonPage;
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
 use Facebook\WebDriver\Exception\NoSuchElementException;
@@ -28,18 +29,16 @@ class ParserService
 
     public function parseCoursePage($courseUrl)
     {
-        $lessonPageUrls = [];
         $this->webdriver->openUrl($courseUrl);
         if(!$this->isAuthorized()) {
             $this->login($this->smfCastsLogin, $this->smfCastsPassword);
             $this->webdriver->openUrl($courseUrl);
         }
-        $courseTitleText = $this->webdriver->findOne('h1')->getText();
-        $lessonUrlElements = $this->webdriver->findAll('ul.chapter-list a');
 
-        foreach ($lessonUrlElements as $lessonUrlElement) {
-            $lessonPageUrls[] = $lessonUrlElement->getAttribute('href');
-        }
+        $coursePage = new CoursePage($this->webdriver, $courseUrl);
+
+        $courseTitleText = $coursePage->getCourseName();
+        $lessonPageUrls = $coursePage->getLessonsUrls();
 
         foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
             $lessonPage = new LessonPage($this->webdriver, $lessonPageUrl);
