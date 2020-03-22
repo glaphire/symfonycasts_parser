@@ -10,7 +10,7 @@ class LessonPage extends BasePageObject
     public const DOWNLOAD_MENU_LIST = '.dropdown-menu.show';
 
     public const DOWNLOAD_MENU_LIST_ITEM_VIDEO = '.dropdown-menu a[data-download-type=video]';
-    public const DOWNLOAD_MENU_LIST_ITEM_SCRIPT = '.dropdown-menu a[data-download-type=code]';
+    public const DOWNLOAD_MENU_LIST_ITEM_SCRIPT = '.dropdown-menu a[data-download-type=script]';
     public const DOWNLOAD_MENU_LIST_ITEM_CODE_ARCHIVE = '.dropdown-menu a[data-download-type=code]';
 
     public function __construct(WebdriverFacade $webdriver)

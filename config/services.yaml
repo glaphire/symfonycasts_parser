@@ -37,7 +37,7 @@ services:
     App\Module\SymfonycastsParser\Services\WebdriverFacade:
         arguments:
             $host: 'http://localhost:4444'
-            $downloadDirAbsPath: '%temporaryDownloadDirName%'
+            $downloadDirAbsPath: '%downloadDirAbsPath%/%temporaryDownloadDirName%'
             $profileDirAbsPath: '%profileDirectoryAbsPath%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
