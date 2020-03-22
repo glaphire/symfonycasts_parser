@@ -15,8 +15,12 @@ class ParserService
     private $temporaryDownloadDirPath;
     private $downloadDirAbsPath;
 
-    public function __construct(Filesystem $filesystem, WebdriverFacade $webdriver, PageFactory $pageFactory, $downloadDirAbsPath)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        WebdriverFacade $webdriver,
+        PageFactory $pageFactory,
+        string $downloadDirAbsPath
+    ) {
         $this->filesystem = $filesystem;
         $this->webdriver = $webdriver;
         $this->pageFactory = $pageFactory;
@@ -53,7 +57,7 @@ class ParserService
 
         $courseDirPath = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
         $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
-        //$this->webdriver->close();
+        $this->webdriver->close();
         return true;
     }
 

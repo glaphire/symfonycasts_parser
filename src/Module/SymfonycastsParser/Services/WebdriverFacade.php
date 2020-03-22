@@ -87,8 +87,6 @@ class WebdriverFacade
     public function waitFilesToDownload()
     {
         do {
-            var_dump($this->searchUnfinishedDownloadingFiles());
-            echo date('H:i:s') . PHP_EOL;
             sleep(5);
         } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }

@@ -11,8 +11,6 @@ class LoginPage extends BasePageObject
     public const FORM_INPUT_PASSWORD = '#password';
     public const FORM_SUBMIT_BUTTON = '#_submit';
 
-    public const LOGIN_PAGE_URL = 'https://symfonycasts.com/login';
-
     private $login;
     private $password;
 

@@ -10,7 +10,6 @@ class CoursePage extends BasePageObject
 
     public function __construct(WebdriverFacade $webdriver)
     {
-        //$webdriver->openUrl($courseUrl);
         parent::__construct($webdriver);
     }
 
