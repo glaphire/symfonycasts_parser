@@ -12,4 +12,9 @@ class BasePageObject
     {
         $this->webdriver = $webdriver;
     }
+
+    public function openPage(string $url)
+    {
+        $this->webdriver->openUrl($url);
+    }
 }

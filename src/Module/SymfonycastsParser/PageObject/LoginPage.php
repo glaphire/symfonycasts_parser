@@ -7,21 +7,19 @@ use Facebook\WebDriver\Exception\NoSuchElementException;
 
 class LoginPage extends BasePageObject
 {
-    private $login;
-    private $password;
-
     public const FORM_INPUT_LOGIN = '#email';
     public const FORM_INPUT_PASSWORD = '#password';
     public const FORM_SUBMIT_BUTTON = '#_submit';
 
     public const LOGIN_PAGE_URL = 'https://symfonycasts.com/login';
 
+    private $login;
+    private $password;
+
     public function __construct(WebdriverFacade $webdriver, $login, $password)
     {
         $this->login = $login;
         $this->password = $password;
-
-        $webdriver->openUrl(self::LOGIN_PAGE_URL);
         parent::__construct($webdriver);
     }
 

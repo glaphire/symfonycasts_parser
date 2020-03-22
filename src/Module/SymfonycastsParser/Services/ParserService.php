@@ -2,46 +2,46 @@
 
 namespace App\Module\SymfonycastsParser\Services;
 
-use App\Module\SymfonycastsParser\PageObject\CoursePage;
-use App\Module\SymfonycastsParser\PageObject\LessonPage;
-use App\Module\SymfonycastsParser\PageObject\LoginPage;
+use App\Module\SymfonycastsParser\PageObject\PageFactory;
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
 {
     private $filesystem;
+    private $webdriver;
+    private $pageFactory;
+
     private $temporaryDownloadDirPath;
     private $downloadDirAbsPath;
-    private $webdriver;
-    private $smfCastsLogin;
-    private $smfCastsPassword;
 
-    public function __construct(Filesystem $filesystem, WebdriverFacade $webdriver, $downloadDirAbsPath, string $smfCastsLogin, string $smfCastsPassword)
+    public function __construct(Filesystem $filesystem, WebdriverFacade $webdriver, PageFactory $pageFactory, $downloadDirAbsPath)
     {
         $this->filesystem = $filesystem;
+        $this->webdriver = $webdriver;
+        $this->pageFactory = $pageFactory;
+
         $this->downloadDirAbsPath = $downloadDirAbsPath;
 
-        $this->webdriver = $webdriver;
         $this->temporaryDownloadDirPath = $this->webdriver->getDownloadDirectoryAbsPath();
         $this->filesystem->mkdir($this->temporaryDownloadDirPath);
-
-        $this->smfCastsLogin = $smfCastsLogin;
-        $this->smfCastsPassword = $smfCastsPassword;
     }
 
     public function parseCoursePage($courseUrl)
     {
-        $loginPage = new LoginPage($this->webdriver, $this->smfCastsLogin, $this->smfCastsPassword);
+        $loginPage = $this->pageFactory->create('login');
+        $loginPage->openPage('https://symfonycasts.com/login');
         $loginPage->login();
 
-        $coursePage = new CoursePage($this->webdriver, $courseUrl);
-
+        $coursePage = $this->pageFactory->create('course');
+        $coursePage->openPage($courseUrl);
         $courseTitleText = $coursePage->getCourseName();
         $lessonPageUrls = $coursePage->getLessonsUrls();
 
+        $lessonPage = $this->pageFactory->create('lesson');
+
         foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
-            $lessonPage = new LessonPage($this->webdriver, $lessonPageUrl);
+            $lessonPage->openPage($lessonPageUrl);
 
             if ($lessonNumber == 0) {
                 $lessonPage->downloadCourseCodeArchive();

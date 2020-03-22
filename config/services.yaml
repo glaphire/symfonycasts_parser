@@ -29,8 +29,11 @@ services:
     App\Module\SymfonycastsParser\Services\ParserService:
         arguments:
             $downloadDirAbsPath: '%downloadDirAbsPath%'
-            $smfCastsLogin: '%smfCastsLogin%'
-            $smfCastsPassword: '%smfCastsPassword%'
+    App\Module\SymfonycastsParser\PageObject\PageFactory:
+        arguments:
+            $webdriver: '@App\Module\SymfonycastsParser\Services\WebdriverFacade'
+            $login: '%smfCastsLogin%'
+            $password: '%smfCastsPassword%'
     App\Module\SymfonycastsParser\Services\WebdriverFacade:
         arguments:
             $host: 'http://localhost:4444'

@@ -8,9 +8,9 @@ class CoursePage extends BasePageObject
 {
     public const COURSE_HEADER_NAME = 'h1';
 
-    public function __construct(WebdriverFacade $webdriver, string $courseUrl)
+    public function __construct(WebdriverFacade $webdriver)
     {
-        $webdriver->openUrl($courseUrl);
+        //$webdriver->openUrl($courseUrl);
         parent::__construct($webdriver);
     }
 
