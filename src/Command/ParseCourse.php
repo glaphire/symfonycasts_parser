@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Module\SymfonycastsParser\Services\ParserService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,11 +16,15 @@ class ParseCourse extends Command
      */
     protected $parserService;
 
+    protected $logger;
+
     protected static $defaultName = 'app:parse-course';
 
-    public function __construct(ParserService $parserService)
+    public function __construct(ParserService $parserService, LoggerInterface $logger)
     {
         $this->parserService = $parserService;
+        $this->logger = $logger;
+
         parent::__construct(self::$defaultName);
     }
 
@@ -27,6 +32,7 @@ class ParseCourse extends Command
     {
         $this
             ->addArgument('course_url', InputArgument::REQUIRED, 'URL of course video list')
+            ->addArgument('start_lesson_number', InputArgument::OPTIONAL, 'Number of start lesson')
             ->setDescription('Parses all files from course.')
             ->setHelp('Downloads videos and files from course url provided as argument.');
     }
@@ -34,7 +40,13 @@ class ParseCourse extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $courseUrl = $input->getArgument('course_url');
-        $this->parserService->parseCoursePage($courseUrl);
+        $startLessonNumber = $input->getArgument('start_lesson_number') ?? 1;
+
+        try {
+            $this->parserService->parseCoursePage($courseUrl, $startLessonNumber);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
 
         return 0;
     }

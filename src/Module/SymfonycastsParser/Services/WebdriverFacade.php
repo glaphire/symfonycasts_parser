@@ -95,4 +95,9 @@ class WebdriverFacade
     {
         return $this->downloadDirectoryAbsPath;
     }
+
+    public function close()
+    {
+        return $this->webdriver->close();
+    }
 }

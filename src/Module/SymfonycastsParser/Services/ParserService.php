@@ -31,7 +31,7 @@ class ParserService
         $this->filesystem->mkdir($this->temporaryDownloadDirPath);
     }
 
-    public function parseCoursePage($courseUrl)
+    public function parseCoursePage($courseUrl, $startLessonNumber = 1)
     {
         $loginPage = $this->pageFactory->create('login');
         $loginPage->openPage('https://symfonycasts.com/login');
@@ -44,16 +44,31 @@ class ParserService
 
         $lessonPage = $this->pageFactory->create('lesson');
 
-        foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
-            $lessonPage->openPage($lessonPageUrl);
+        $lessonsAmount = count($lessonPageUrls);
 
-            if ($lessonNumber == 0) {
+        for ($lessonNumber = $startLessonNumber; $lessonNumber <= $lessonsAmount; $lessonNumber++) {
+            $index = $lessonNumber - 1;
+            $lessonPage->openPage($lessonPageUrls[$index]);
+
+            if ($lessonNumber == 1) {
                 $lessonPage->downloadCourseCodeArchive();
                 $lessonPage->downloadCourseScript();
             }
 
             $lessonPage->downloadVideo();
+
         }
+
+//        foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
+//            $lessonPage->openPage($lessonPageUrl);
+//
+//            if ($lessonNumber == 0) {
+//                $lessonPage->downloadCourseCodeArchive();
+//                $lessonPage->downloadCourseScript();
+//            }
+//
+//            $lessonPage->downloadVideo();
+//        }
 
         $courseDirPath = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
         $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
