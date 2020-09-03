@@ -59,17 +59,6 @@ class ParserService
 
         }
 
-//        foreach ($lessonPageUrls as $lessonNumber => $lessonPageUrl) {
-//            $lessonPage->openPage($lessonPageUrl);
-//
-//            if ($lessonNumber == 0) {
-//                $lessonPage->downloadCourseCodeArchive();
-//                $lessonPage->downloadCourseScript();
-//            }
-//
-//            $lessonPage->downloadVideo();
-//        }
-
         $courseDirPath = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
         $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
         $this->webdriver->close();
