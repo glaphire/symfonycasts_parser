@@ -4,14 +4,12 @@ namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Services\WebdriverFacade;
 
-class BasePageObject
+abstract class AbstractPageObject
 {
+    /**
+     * @var WebdriverFacade $webdriver
+     */
     protected $webdriver;
-
-    public function __construct(WebdriverFacade $webdriver)
-    {
-        $this->webdriver = $webdriver;
-    }
 
     public function openPage(string $url)
     {

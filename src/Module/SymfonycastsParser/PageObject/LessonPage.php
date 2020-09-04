@@ -4,7 +4,7 @@ namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Services\WebdriverFacade;
 
-class LessonPage extends BasePageObject
+class LessonPage extends AbstractPageObject
 {
     public const DOWNLOAD_MENU_BUTTON = '#downloadDropdown';
     public const DOWNLOAD_MENU_LIST = '.dropdown-menu.show';
@@ -15,7 +15,7 @@ class LessonPage extends BasePageObject
 
     public function __construct(WebdriverFacade $webdriver)
     {
-        parent::__construct($webdriver);
+        $this->webdriver = $webdriver;
     }
 
     public function parseLessonPage(
