@@ -8,11 +8,16 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
+//TODO: rename to ChromeWebdriver facade
 class WebdriverFacade
 {
     private $webdriver;
     private $downloadDirectoryAbsPath;
 
+    private const DOWNLOADING_RETRY_SECONDS = 5;
+    private const CHROME_UNFINISHED_FILES_PATTERN = "*.crdownload";
+
+    //TODO: move browser setup to separate method
     public function __construct(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
     {
         $options = new ChromeOptions();
@@ -81,13 +86,13 @@ class WebdriverFacade
 
     private function searchUnfinishedDownloadingFiles()
     {
-        return glob($this->downloadDirectoryAbsPath . '/*.crdownload');
+        return glob($this->downloadDirectoryAbsPath . '/' . self::CHROME_UNFINISHED_FILES_PATTERN);
     }
 
     public function waitFilesToDownload()
     {
         do {
-            sleep(5);
+            sleep(self::DOWNLOADING_RETRY_SECONDS);
         } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }
 
