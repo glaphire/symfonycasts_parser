@@ -4,10 +4,13 @@ namespace App\Module\SymfonycastsParser\Services;
 
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
 use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
+use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
 {
+    private const COURSE_BASE_URL = 'https://symfonycasts.com/screencast';
+
     private $filesystem;
     private $webdriver;
     private $pageFactory;
@@ -31,8 +34,11 @@ class ParserService
         $this->filesystem->mkdir($this->temporaryDownloadDirPath);
     }
 
-    public function parseCoursePage($courseUrl, $startLessonNumber = 1)
+    public function parseCoursePage(string $courseUrl, int $startLessonNumber = 1)
     {
+        $this->validateCourseUrl($courseUrl);
+        $this->validateLessonNumber($startLessonNumber);
+
         $loginPage = $this->pageFactory->create('login');
         $loginPage->openPage('https://symfonycasts.com/login');
         $loginPage->login();
@@ -65,6 +71,11 @@ class ParserService
         return true;
     }
 
+    public function shutdownDownloadingProcess()
+    {
+        $this->webdriver->close();
+    }
+
     private function prepareStringForFilesystem(string $string)
     {
         if (empty($string)) {
@@ -72,5 +83,21 @@ class ParserService
         }
         $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
         return $processedString;
+    }
+
+    private function validateCourseUrl(string $courseUrl) {
+        if (strpos($courseUrl, self::COURSE_BASE_URL) !== 0) {
+            throw new InvalidArgumentException("Course url should starts from " . self::COURSE_BASE_URL);
+        }
+        return true;
+    }
+
+    private function validateLessonNumber(int $lessonNumber) {
+
+        if($lessonNumber < 1) {
+            throw new InvalidArgumentException("Lesson number should be less or equal 1");
+        }
+
+        return true;
     }
 }
