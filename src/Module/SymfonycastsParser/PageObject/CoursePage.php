@@ -2,7 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade;
+use App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade;
 
 class CoursePage extends AbstractPageObject
 {

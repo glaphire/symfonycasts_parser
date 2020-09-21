@@ -4,6 +4,7 @@ namespace App\Module\SymfonycastsParser\Service;
 
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
 use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
+use App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 

@@ -27,15 +27,15 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-    App\Module\SymfonycastsParser\Services\ParserService:
+    App\Module\SymfonycastsParser\Service\ParserService:
         arguments:
             $downloadDirAbsPath: '%downloadDirAbsPath%'
     App\Module\SymfonycastsParser\PageObject\PageFactory:
         arguments:
-            $webdriver: '@App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade'
+            $webdriver: '@App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade'
             $login: '%smfCastsLogin%'
             $password: '%smfCastsPassword%'
-    App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade:
+    App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade:
         arguments:
             $host: '%host%'
             $downloadDirAbsPath: '%downloadDirAbsPath%/%temporaryDownloadDirName%'

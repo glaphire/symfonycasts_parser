@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\SymfonycastsParser\Services;
+namespace App\Module\SymfonycastsParser\Service\WebdriverFacade;
 
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;

@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Module\SymfonycastsParser\Services\ParserService;
+use App\Module\SymfonycastsParser\Service\ParserService;
 use InvalidArgumentException;
 use Exception;
 use Psr\Log\LoggerInterface;
