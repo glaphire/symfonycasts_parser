@@ -2,7 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Services\WebdriverFacade;
+use App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade;
 
 class LessonPage extends AbstractPageObject
 {
@@ -13,7 +13,7 @@ class LessonPage extends AbstractPageObject
     public const DOWNLOAD_MENU_LIST_ITEM_SCRIPT = '.dropdown-menu a[data-download-type=script]';
     public const DOWNLOAD_MENU_LIST_ITEM_CODE_ARCHIVE = '.dropdown-menu a[data-download-type=code]';
 
-    public function __construct(WebdriverFacade $webdriver)
+    public function __construct(ChromeWebdriverFacade $webdriver)
     {
         $this->webdriver = $webdriver;
     }

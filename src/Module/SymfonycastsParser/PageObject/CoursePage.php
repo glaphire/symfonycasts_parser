@@ -2,13 +2,13 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Services\WebdriverFacade;
+use App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade;
 
 class CoursePage extends AbstractPageObject
 {
     public const COURSE_HEADER_NAME = 'h1';
 
-    public function __construct(WebdriverFacade $webdriver)
+    public function __construct(ChromeWebdriverFacade $webdriver)
     {
         $this->webdriver = $webdriver;
     }

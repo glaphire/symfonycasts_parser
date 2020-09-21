@@ -2,12 +2,12 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Services\WebdriverFacade;
+use App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade;
 
 abstract class AbstractPageObject
 {
     /**
-     * @var WebdriverFacade $webdriver
+     * @var ChromeWebdriverFacade $webdriver
      */
     protected $webdriver;
 

@@ -20,7 +20,7 @@ class ParserService
 
     public function __construct(
         Filesystem $filesystem,
-        WebdriverFacade $webdriver,
+        ChromeWebdriverFacade $webdriver,
         PageFactory $pageFactory,
         string $downloadDirAbsPath
     ) {

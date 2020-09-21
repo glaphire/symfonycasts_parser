@@ -2,7 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Services\WebdriverFacade;
+use App\Module\SymfonycastsParser\Services\ChromeWebdriverFacade;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
 class LoginPage extends AbstractPageObject
@@ -14,7 +14,7 @@ class LoginPage extends AbstractPageObject
     private $login;
     private $password;
 
-    public function __construct(WebdriverFacade $webdriver, $login, $password)
+    public function __construct(ChromeWebdriverFacade $webdriver, $login, $password)
     {
         $this->login = $login;
         $this->password = $password;

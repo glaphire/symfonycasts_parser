@@ -8,8 +8,7 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
-//TODO: rename to ChromeWebdriver facade
-class WebdriverFacade
+class ChromeWebdriverFacade
 {
     private $webdriver;
     private $downloadDirectoryAbsPath;
