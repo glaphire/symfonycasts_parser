@@ -59,7 +59,7 @@ class ParseCourse extends Command
 
     private function validateLessonNumberType($startLessonNumber)
     {
-        if ((int)$startLessonNumber !== $startLessonNumber) {
+        if ((int)$startLessonNumber != $startLessonNumber) {
             throw new InvalidArgumentException("Lesson number should be an integer");
         }
 
