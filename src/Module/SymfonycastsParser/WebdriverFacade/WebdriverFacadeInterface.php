@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\SymfonycastsParser\Service\WebdriverFacade;
+namespace App\Module\SymfonycastsParser\WebdriverFacade;
 
 interface WebdriverFacadeInterface
 {

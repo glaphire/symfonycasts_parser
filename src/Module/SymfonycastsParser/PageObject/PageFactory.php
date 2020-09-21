@@ -3,7 +3,7 @@
 namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
-use App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade;
+use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
 class PageFactory
 {
@@ -11,7 +11,7 @@ class PageFactory
     private $login;
     private $password;
 
-    public function __construct(ChromeWebdriverFacade $webdriver, $login, $password)
+    public function __construct(WebdriverFacadeInterface $webdriver, $login, $password)
     {
         $this->webdriver = $webdriver;
         $this->login = $login;

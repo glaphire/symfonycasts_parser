@@ -2,14 +2,11 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade;
+use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
 abstract class AbstractPageObject
 {
-    /**
-     * @var ChromeWebdriverFacade $webdriver
-     */
-    protected $webdriver;
+    protected WebdriverFacadeInterface $webdriver;
 
     public function openPage(string $url)
     {

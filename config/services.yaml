@@ -32,13 +32,13 @@ services:
             $downloadDirAbsPath: '%downloadDirAbsPath%'
     App\Module\SymfonycastsParser\PageObject\PageFactory:
         arguments:
-            $webdriver: '@App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade'
+            $webdriver: '@App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface'
             $login: '%smfCastsLogin%'
             $password: '%smfCastsPassword%'
-    App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade:
+
+    App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface: '@App\Module\SymfonycastsParser\WebdriverFacade\ChromeWebdriverFacade'
+    App\Module\SymfonycastsParser\WebdriverFacade\ChromeWebdriverFacade:
         arguments:
             $host: '%host%'
             $downloadDirAbsPath: '%downloadDirAbsPath%/%temporaryDownloadDirName%'
             $profileDirAbsPath: '%profileDirectoryAbsPath%'
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\SymfonycastsParser\Service\WebdriverFacade;
+namespace App\Module\SymfonycastsParser\WebdriverFacade;
 
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -8,7 +8,7 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
-class ChromeWebdriverFacade
+class ChromeWebdriverFacade implements WebdriverFacadeInterface
 {
     private $webdriver;
     private $downloadDirectoryAbsPath;

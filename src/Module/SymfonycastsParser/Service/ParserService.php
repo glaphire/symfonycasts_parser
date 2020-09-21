@@ -4,7 +4,7 @@ namespace App\Module\SymfonycastsParser\Service;
 
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
 use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
-use App\Module\SymfonycastsParser\Service\WebdriverFacade\ChromeWebdriverFacade;
+use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -21,7 +21,7 @@ class ParserService
 
     public function __construct(
         Filesystem $filesystem,
-        ChromeWebdriverFacade $webdriver,
+        WebdriverFacadeInterface $webdriver,
         PageFactory $pageFactory,
         string $downloadDirAbsPath
     ) {
