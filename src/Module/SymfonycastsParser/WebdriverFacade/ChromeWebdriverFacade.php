@@ -16,28 +16,9 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     private const DOWNLOADING_RETRY_SECONDS = 5;
     private const CHROME_UNFINISHED_FILES_PATTERN = "*.crdownload";
 
-    //TODO: move browser setup to separate method
     public function __construct(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
     {
-        $options = new ChromeOptions();
-
-        $options->addArguments([
-            "--user-data-dir=$profileDirAbsPath",
-        ]);
-
-        $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
-
-        $options->setExperimentalOption("prefs", [
-            "download.prompt_for_download" => false,
-            "download.directory_upgrade" => true,
-            "safebrowsing.enabled" => true,
-            "download.default_directory" => $this->downloadDirectoryAbsPath,
-            "plugins.always_open_pdf_externally" => true,
-        ]);
-
-        $caps = DesiredCapabilities::chrome();
-        $caps->setCapability(ChromeOptions::CAPABILITY, $options);
-        $this->webdriver = RemoteWebDriver::create($host, $caps);
+        $this->setupChromeDriver($host, $downloadDirAbsPath, $profileDirAbsPath);
     }
 
     public function click(string $cssSelector)
@@ -103,5 +84,29 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     public function close()
     {
         return $this->webdriver->close();
+    }
+
+    private function setupChromeDriver(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
+    {
+        $options = new ChromeOptions();
+
+        $options->addArguments([
+            "--user-data-dir=$profileDirAbsPath",
+        ]);
+
+        $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
+
+        $options->setExperimentalOption("prefs", [
+            "download.prompt_for_download" => false,
+            "download.directory_upgrade" => true,
+            "safebrowsing.enabled" => true,
+            "download.default_directory" => $this->downloadDirectoryAbsPath,
+            "plugins.always_open_pdf_externally" => true,
+        ]);
+
+        $caps = DesiredCapabilities::chrome();
+        //ChromeOptions::CAPABILITY is deprecated, but without it it's impossible to set capabities
+        $caps->setCapability(ChromeOptions::CAPABILITY, $options);
+        $this->webdriver = RemoteWebDriver::create($host, $caps);
     }
 }
