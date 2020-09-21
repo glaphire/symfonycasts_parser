@@ -67,12 +67,12 @@ class ChromeWebdriverFacade
         return $this->webdriver;
     }
 
-    public function findOne($cssSelector)
+    public function findOne(string $cssSelector)
     {
         return $this->webdriver->findElement(WebDriverBy::cssSelector($cssSelector));
     }
 
-    public function findAll($cssSelector)
+    public function findAll(string $cssSelector)
     {
         return $this->webdriver->findElements(WebDriverBy::cssSelector($cssSelector));
     }

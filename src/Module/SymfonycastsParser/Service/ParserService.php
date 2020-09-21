@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Module\SymfonycastsParser\Services;
+namespace App\Module\SymfonycastsParser\Service;
 
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
-use App\Module\SymfonycastsParser\Services\Exceptions\ProcessingException;
+use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 
