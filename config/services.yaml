@@ -4,13 +4,17 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    downloadDirAbsPath: '%env(DOWNLOAD_DIR_ABS_PATH)%'
+    temporaryDownloadDirName: '%env(TEMP_DOWNLOAD_DIR_NAME)%'
+    smfCastsLogin: '%env(SYMFONYCASTS_LOGIN)%'
+    smfCastsPassword:  '%env(SYMFONYCASTS_PASSWORD)%'
+    profileDirectoryAbsPath: '%env(PROFILE_DIRECTORY_ABS_PATH)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -22,6 +26,18 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
+    App\Module\SymfonycastsParser\Services\ParserService:
+        arguments:
+            $downloadDirAbsPath: '%downloadDirAbsPath%'
+    App\Module\SymfonycastsParser\PageObject\PageFactory:
+        arguments:
+            $webdriver: '@App\Module\SymfonycastsParser\Services\WebdriverFacade'
+            $login: '%smfCastsLogin%'
+            $password: '%smfCastsPassword%'
+    App\Module\SymfonycastsParser\Services\WebdriverFacade:
+        arguments:
+            $host: 'http://localhost:4444'
+            $downloadDirAbsPath: '%downloadDirAbsPath%/%temporaryDownloadDirName%'
+            $profileDirAbsPath: '%profileDirectoryAbsPath%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
