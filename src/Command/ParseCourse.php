@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\Module\SymfonycastsParser\Service\ParserService;
-use InvalidArgumentException;
 use Exception;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,7 +50,7 @@ class ParseCourse extends Command
         } catch (Exception $e) {
             $this->logger->error($e);
             $this->parserService->shutdownDownloadingProcess();
-            $terminationMessage = sprintf("Downloading process terminated due to exception: %s", $e->getMessage());
+            $terminationMessage = sprintf('Downloading process terminated due to exception: %s', $e->getMessage());
             $output->writeln("<error>$terminationMessage</error>");
         }
 
@@ -59,8 +59,8 @@ class ParseCourse extends Command
 
     private function validateLessonNumberType($startLessonNumber)
     {
-        if ((int)$startLessonNumber != $startLessonNumber) {
-            throw new InvalidArgumentException("Lesson number should be an integer");
+        if ((int) $startLessonNumber != $startLessonNumber) {
+            throw new InvalidArgumentException('Lesson number should be an integer');
         }
 
         return true;

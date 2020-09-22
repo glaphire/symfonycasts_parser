@@ -23,7 +23,7 @@ class LoginPage extends AbstractPageObject
 
     public function login()
     {
-        if(!$this->isAuthorized()) {
+        if (!$this->isAuthorized()) {
             $this->webdriver->fillInput(self::FORM_INPUT_LOGIN, $this->login);
             $this->webdriver->fillInput(self::FORM_INPUT_PASSWORD, $this->password);
             $this->webdriver->click(self::FORM_SUBMIT_BUTTON);
@@ -35,6 +35,7 @@ class LoginPage extends AbstractPageObject
         try {
             $this->webdriver->waitToBeClickable('.navbar');
             $this->webdriver->findOne('a[title*="Account Menu"]');
+
             return true;
         } catch (NoSuchElementException $e) {
             return false;

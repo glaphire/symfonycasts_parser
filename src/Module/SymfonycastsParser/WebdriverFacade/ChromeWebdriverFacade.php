@@ -14,7 +14,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     private $downloadDirectoryAbsPath;
 
     private const DOWNLOADING_RETRY_SECONDS = 5;
-    private const CHROME_UNFINISHED_FILES_PATTERN = "*.crdownload";
+    private const CHROME_UNFINISHED_FILES_PATTERN = '*.crdownload';
 
     public function __construct(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
     {
@@ -45,6 +45,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     public function openUrl(string $url)
     {
         $this->webdriver = $this->webdriver->get($url);
+
         return $this->webdriver;
     }
 
@@ -66,7 +67,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
 
     private function searchUnfinishedDownloadingFiles()
     {
-        return glob($this->downloadDirectoryAbsPath . '/' . self::CHROME_UNFINISHED_FILES_PATTERN);
+        return glob($this->downloadDirectoryAbsPath.'/'.self::CHROME_UNFINISHED_FILES_PATTERN);
     }
 
     public function waitFilesToDownload()
@@ -96,12 +97,12 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
 
         $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
 
-        $options->setExperimentalOption("prefs", [
-            "download.prompt_for_download" => false,
-            "download.directory_upgrade" => true,
-            "safebrowsing.enabled" => true,
-            "download.default_directory" => $this->downloadDirectoryAbsPath,
-            "plugins.always_open_pdf_externally" => true,
+        $options->setExperimentalOption('prefs', [
+            'download.prompt_for_download' => false,
+            'download.directory_upgrade' => true,
+            'safebrowsing.enabled' => true,
+            'download.default_directory' => $this->downloadDirectoryAbsPath,
+            'plugins.always_open_pdf_externally' => true,
         ]);
 
         $caps = DesiredCapabilities::chrome();

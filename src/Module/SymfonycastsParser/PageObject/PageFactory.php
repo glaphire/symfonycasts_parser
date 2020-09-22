@@ -41,7 +41,7 @@ class PageFactory
                 break;
             default:
                 $errorMessage = "Page with type '$pageType' not found."
-                    . " Allowed types:" . implode(', ', $this->allowedTypes());
+                    .' Allowed types:'.implode(', ', $this->allowedTypes());
                 throw new ProcessingException($errorMessage);
                 break;
         }

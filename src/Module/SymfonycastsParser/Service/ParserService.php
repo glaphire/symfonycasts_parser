@@ -57,18 +57,18 @@ class ParserService
             $index = $lessonNumber - 1;
             $lessonPage->openPage($lessonPageUrls[$index]);
 
-            if ($lessonNumber == 1) {
+            if (1 == $lessonNumber) {
                 $lessonPage->downloadCourseCodeArchive();
                 $lessonPage->downloadCourseScript();
             }
 
             $lessonPage->downloadVideo();
-
         }
 
-        $courseDirPath = $this->downloadDirAbsPath . '/' . $this->prepareStringForFilesystem($courseTitleText);
+        $courseDirPath = $this->downloadDirAbsPath.'/'.$this->prepareStringForFilesystem($courseTitleText);
         $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
         $this->webdriver->close();
+
         return true;
     }
 
@@ -83,20 +83,23 @@ class ParserService
             throw new ProcessingException('String cannot be empty');
         }
         $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
+
         return $processedString;
     }
 
-    private function validateCourseUrl(string $courseUrl) {
-        if (strpos($courseUrl, self::COURSE_BASE_URL) !== 0) {
-            throw new InvalidArgumentException("Course url should starts from " . self::COURSE_BASE_URL);
+    private function validateCourseUrl(string $courseUrl)
+    {
+        if (0 !== strpos($courseUrl, self::COURSE_BASE_URL)) {
+            throw new InvalidArgumentException('Course url should starts from '.self::COURSE_BASE_URL);
         }
+
         return true;
     }
 
-    private function validateLessonNumber(int $lessonNumber) {
-
-        if($lessonNumber < 1) {
-            throw new InvalidArgumentException("Lesson number should be less or equal 1");
+    private function validateLessonNumber(int $lessonNumber)
+    {
+        if ($lessonNumber < 1) {
+            throw new InvalidArgumentException('Lesson number should be less or equal 1');
         }
 
         return true;
