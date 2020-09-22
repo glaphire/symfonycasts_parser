@@ -13,10 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ParseCourse extends Command
 {
-    /**
-     * @var ParserService
-     */
-    protected $parserService;
+    protected ParserService $parserService;
 
     protected $logger;
 

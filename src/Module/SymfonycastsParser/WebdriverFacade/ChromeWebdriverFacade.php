@@ -10,8 +10,8 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 
 class ChromeWebdriverFacade implements WebdriverFacadeInterface
 {
-    private $webdriver;
-    private $downloadDirectoryAbsPath;
+    private RemoteWebDriver $webdriver;
+    private string $downloadDirectoryAbsPath;
 
     private const DOWNLOADING_RETRY_SECONDS = 5;
     private const CHROME_UNFINISHED_FILES_PATTERN = '*.crdownload';
