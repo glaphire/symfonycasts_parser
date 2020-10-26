@@ -26,7 +26,7 @@ class ConsoleErrorSubscriber implements EventSubscriberInterface
         $errorLogMessage = sprintf('Unexpected error occured with message: %s', $error->getMessage());
         $this->logger->error($errorLogMessage);
         $this->logger->info('Closing browser');
-        $this->webdriverFacade->close();
+        $this->webdriverFacade->quit();
     }
 
     public static function getSubscribedEvents()

@@ -82,9 +82,9 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         return $this->downloadDirectoryAbsPath;
     }
 
-    public function close()
+    public function quit()
     {
-        return $this->webdriver->close();
+        return $this->webdriver->quit();
     }
 
     private function setupChromeDriver(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)

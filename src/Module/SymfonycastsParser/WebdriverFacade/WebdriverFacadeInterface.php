@@ -20,5 +20,5 @@ interface WebdriverFacadeInterface
 
     public function waitFilesToDownload();
 
-    public function close();
+    public function quit();
 }

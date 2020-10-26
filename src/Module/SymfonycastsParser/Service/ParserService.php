@@ -67,14 +67,14 @@ class ParserService
 
         $courseDirPath = $this->downloadDirAbsPath.'/'.$this->prepareStringForFilesystem($courseTitleText);
         $this->filesystem->rename($this->temporaryDownloadDirPath, $courseDirPath);
-        $this->webdriver->close();
+        $this->webdriver->quit();
 
         return true;
     }
 
     public function shutdownDownloadingProcess()
     {
-        $this->webdriver->close();
+        $this->webdriver->quit();
     }
 
     private function prepareStringForFilesystem(string $string)
