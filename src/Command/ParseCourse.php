@@ -33,7 +33,8 @@ class ParseCourse extends Command
             ->addArgument('course_url', InputArgument::REQUIRED, 'URL of course video list')
             ->addArgument('start_lesson_number', InputArgument::OPTIONAL, 'Number of start lesson')
             ->setDescription('Parses all files from course.')
-            ->setHelp('Downloads videos and files from course url provided as argument.');
+            ->setHelp('Downloads videos and files from course url provided as argument.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -48,7 +49,7 @@ class ParseCourse extends Command
             $this->logger->error($e);
             $this->parserService->shutdownDownloadingProcess();
             $terminationMessage = sprintf('Downloading process terminated due to exception: %s', $e->getMessage());
-            $output->writeln("<error>$terminationMessage</error>");
+            $output->writeln("<error>{$terminationMessage}</error>");
         }
 
         return 0;
