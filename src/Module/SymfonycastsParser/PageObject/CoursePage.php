@@ -6,24 +6,33 @@ use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
 class CoursePage extends AbstractPageObject
 {
-    public const COURSE_HEADER_NAME = 'h1';
+    private const SLCTR_COURSE_HEADER_NAME = 'h1';
+    private const SLCTR_LESSON_NAME = 'ul.chapter-list a';
 
     public function __construct(WebdriverFacadeInterface $webdriver)
     {
         $this->webdriver = $webdriver;
     }
 
-    public function getCourseName()
+    public function getCourseName(): string
     {
-        return $this->webdriver->findOne(self::COURSE_HEADER_NAME)->getText();
+        return $this
+            ->webdriver
+            ->findOne(self::SLCTR_COURSE_HEADER_NAME)
+            ->getText();
     }
 
     public function getLessons()
     {
-        return $this->webdriver->findAll('ul.chapter-list a');
+        return $this
+            ->webdriver
+            ->findAll(self::SLCTR_LESSON_NAME);
     }
 
-    public function getLessonsUrls()
+    /**
+     * @return string[]
+     */
+    public function getLessonsUrls(): array
     {
         $lessonPageUrls = [];
         $lessonElements = $this->getLessons();
