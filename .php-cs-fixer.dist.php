@@ -12,6 +12,7 @@ return (new PhpCsFixer\Config())
         '@PhpCsFixer' => true,
         '@Symfony' => true,
         '@DoctrineAnnotation' => true,
+        'increment_style' => false,
     ])
     ->setFinder($finder)
     ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line
