@@ -82,9 +82,8 @@ class ParserService
         if (empty($string)) {
             throw new ProcessingException('String cannot be empty');
         }
-        $processedString = str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
 
-        return $processedString;
+        return str_replace(' ', '_', preg_replace('/[^a-z\d ]+/', '', strtolower($string)));
     }
 
     private function validateCourseUrl(string $courseUrl)

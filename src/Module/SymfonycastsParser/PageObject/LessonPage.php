@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Module\SymfonycastsParser\PageObject;
+
 use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
 class LessonPage extends AbstractPageObject

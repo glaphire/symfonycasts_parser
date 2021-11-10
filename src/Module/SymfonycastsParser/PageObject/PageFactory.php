@@ -40,7 +40,7 @@ class PageFactory
                 $page = new LessonPage($this->webdriver);
                 break;
             default:
-                $errorMessage = "Page with type '$pageType' not found."
+                $errorMessage = "Page with type '{$pageType}' not found."
                     .' Allowed types:'.implode(', ', $this->allowedTypes());
                 throw new ProcessingException($errorMessage);
                 break;

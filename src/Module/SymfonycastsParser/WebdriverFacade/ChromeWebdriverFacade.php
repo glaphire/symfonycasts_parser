@@ -26,7 +26,8 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         $this
             ->webdriver
             ->findElement(WebDriverBy::cssSelector($cssSelector))
-            ->click();
+            ->click()
+        ;
     }
 
     public function waitToBeClickable(string $cssSelector)
@@ -92,7 +93,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         $options = new ChromeOptions();
 
         $options->addArguments([
-            "--user-data-dir=$profileDirAbsPath",
+            "--user-data-dir={$profileDirAbsPath}",
         ]);
 
         $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
