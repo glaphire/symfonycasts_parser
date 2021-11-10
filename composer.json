@@ -5,6 +5,7 @@
         "php": "^7.4.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "friendsofphp/php-cs-fixer": "2.19.2",
         "php-webdriver/webdriver": "^1.8",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
