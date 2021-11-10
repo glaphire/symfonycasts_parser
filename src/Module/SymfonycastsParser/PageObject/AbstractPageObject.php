@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
-abstract class AbstractPageObject
+abstract class AbstractPageObject implements PageInterface
 {
     protected WebdriverFacadeInterface $webdriver;
 

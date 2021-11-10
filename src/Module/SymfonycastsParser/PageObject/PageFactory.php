@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
@@ -7,43 +7,56 @@ use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
 
 class PageFactory
 {
-    private $webdriver;
-    private $login;
-    private $password;
+    private const TYPE_LOGIN = 'login';
+    private const TYPE_COURSE = 'course';
+    private const TYPE_LESSON = 'lesson';
 
-    public function __construct(WebdriverFacadeInterface $webdriver, $login, $password)
+    private WebdriverFacadeInterface $webdriver;
+    private string $login;
+    private string $password;
+
+    public function __construct(WebdriverFacadeInterface $webdriver, string $login, string $password)
     {
         $this->webdriver = $webdriver;
         $this->login = $login;
         $this->password = $password;
     }
 
-    private function allowedTypes()
+    private function allowedTypes(): array
     {
         return [
-            'login',
-            'course',
-            'lesson',
+            self::TYPE_LESSON,
+            self::TYPE_LOGIN,
+            self::TYPE_COURSE,
         ];
     }
 
-    public function create($pageType)
+    /**
+     * @throws ProcessingException
+     */
+    public function create(string $pageType): PageInterface
     {
         switch ($pageType) {
-            case 'login':
+            case self::TYPE_LOGIN:
                 $page = new LoginPage($this->webdriver, $this->login, $this->password);
+
                 break;
-            case 'course':
+            case self::TYPE_COURSE:
                 $page = new CoursePage($this->webdriver);
+
                 break;
-            case 'lesson':
+            case self::TYPE_LESSON:
                 $page = new LessonPage($this->webdriver);
+
                 break;
             default:
-                $errorMessage = "Page with type '{$pageType}' not found."
-                    .' Allowed types:'.implode(', ', $this->allowedTypes());
+                $errorMessage = sprintf(
+                    'Page with type "%s" was not found. Allowed types: %s',
+                    $pageType,
+                    implode(', ', $this->allowedTypes())
+                );
+
                 throw new ProcessingException($errorMessage);
-                break;
         }
 
         return $page;
