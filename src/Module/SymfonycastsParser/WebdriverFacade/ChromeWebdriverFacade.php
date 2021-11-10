@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\WebdriverFacade;
 
@@ -6,6 +6,7 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverElement;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
 class ChromeWebdriverFacade implements WebdriverFacadeInterface
@@ -21,7 +22,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         $this->setupChromeDriver($host, $downloadDirAbsPath, $profileDirAbsPath);
     }
 
-    public function click(string $cssSelector)
+    public function click(string $cssSelector): void
     {
         $this
             ->webdriver
@@ -30,65 +31,86 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         ;
     }
 
-    public function waitToBeClickable(string $cssSelector)
+    public function waitToBeClickable(string $cssSelector): void
     {
-        $this->webdriver->wait()->until(
-            WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::cssSelector($cssSelector))
-        );
+        $this->webdriver
+            ->wait()
+            ->until(
+                WebDriverExpectedCondition::elementToBeClickable(
+                    WebDriverBy::cssSelector($cssSelector)
+                )
+            )
+        ;
     }
 
-    public function waitAndClick(string $cssSelector)
+    public function waitAndClick(string $cssSelector): void
     {
         $this->waitToBeClickable($cssSelector);
         $this->click($cssSelector);
     }
 
-    public function openUrl(string $url)
+    public function openUrl(string $url): self
     {
         $this->webdriver = $this->webdriver->get($url);
 
         return $this->webdriver;
     }
 
-    public function findOne(string $cssSelector)
+    public function findOne(string $cssSelector): WebDriverElement
     {
-        return $this->webdriver->findElement(WebDriverBy::cssSelector($cssSelector));
+        return $this
+            ->webdriver
+            ->findElement(WebDriverBy::cssSelector($cssSelector));
     }
 
+    /**
+     * @return WebDriverElement[]
+     */
     public function findAll(string $cssSelector)
     {
-        return $this->webdriver->findElements(WebDriverBy::cssSelector($cssSelector));
+        return $this
+            ->webdriver
+            ->findElements(WebDriverBy::cssSelector($cssSelector));
     }
 
-    public function fillInput(string $cssSelector, string $text)
+    public function fillInput(string $cssSelector, string $text): void
     {
         $this->waitAndClick($cssSelector);
-        $this->webdriver->getKeyboard()->sendKeys($text);
+        $this
+            ->webdriver
+            ->getKeyboard()
+            ->sendKeys($text);
     }
 
+    /**
+     * @return array|false
+     */
     private function searchUnfinishedDownloadingFiles()
     {
         return glob($this->downloadDirectoryAbsPath.'/'.self::CHROME_UNFINISHED_FILES_PATTERN);
     }
 
-    public function waitFilesToDownload()
+    public function waitFilesToDownload(): void
     {
         do {
             sleep(self::DOWNLOADING_RETRY_SECONDS);
         } while (!empty($this->searchUnfinishedDownloadingFiles()));
     }
 
-    public function getDownloadDirectoryAbsPath()
+    public function getDownloadDirectoryAbsPath(): string
     {
         return $this->downloadDirectoryAbsPath;
     }
 
-    public function quit()
+    public function quit(): void
     {
         return $this->webdriver->quit();
     }
 
-    private function setupChromeDriver(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
+    private function setupChromeDriver(
+        string $host,
+        string $downloadDirAbsPath,
+        string $profileDirAbsPath): RemoteWebDriver
     {
         $options = new ChromeOptions();
 
@@ -110,5 +132,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         //ChromeOptions::CAPABILITY is deprecated, but without it it's impossible to set capabities
         $caps->setCapability(ChromeOptions::CAPABILITY, $options);
         $this->webdriver = RemoteWebDriver::create($host, $caps);
+
+        return $this->webdriver;
     }
 }
