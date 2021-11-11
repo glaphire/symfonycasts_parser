@@ -59,7 +59,6 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     public function openUrl(string $url)
     {
         $this->webdriver = $this->webdriver->get($url);
-        var_dump($url);
 
         return $this->webdriver;
     }
