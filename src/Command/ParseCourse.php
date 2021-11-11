@@ -15,7 +15,7 @@ class ParseCourse extends Command
 {
     protected ParserService $parserService;
 
-    protected $logger;
+    protected LoggerInterface $logger;
 
     protected static $defaultName = 'app:parse-course';
 

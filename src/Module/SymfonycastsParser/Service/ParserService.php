@@ -13,7 +13,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ParserService
 {
-    private const COURSE_BASE_URL = 'https://symfonycasts.com/screencast';
+    private const SFCASTS_COURSE_BASE_URL = 'https://symfonycasts.com/screencast';
+    private const SFCASTS_LOGIN_URL = 'https://symfonycasts.com/login';
+
     private const REGEX_FILENAME_EXCEPT_PATTERN = '/[^a-z\d ]+/';
 
     private $filesystem;
@@ -46,7 +48,7 @@ class ParserService
 
         /** @var LoginPage $loginPage */
         $loginPage = $this->pageFactory->create('login');
-        $loginPage->openPage('https://symfonycasts.com/login');
+        $loginPage->openPage(self::SFCASTS_LOGIN_URL);
         $loginPage->login();
 
         /** @var CoursePage $coursePage */
@@ -100,8 +102,8 @@ class ParserService
 
     private function validateCourseUrl(string $courseUrl): bool
     {
-        if (0 !== strpos($courseUrl, self::COURSE_BASE_URL)) {
-            throw new InvalidArgumentException('Course url should starts from '.self::COURSE_BASE_URL);
+        if (0 !== strpos($courseUrl, self::SFCASTS_COURSE_BASE_URL)) {
+            throw new InvalidArgumentException('Course url should starts from '.self::SFCASTS_COURSE_BASE_URL);
         }
 
         return true;

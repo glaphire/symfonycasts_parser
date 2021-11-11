@@ -11,11 +11,11 @@ class ChromeWebdriverFactory
 {
     private string $host;
 
-    private string $downloadDirAbsPath;
+    private ?string $downloadDirAbsPath = null;
 
     private string $profileDirAbsPath;
 
-    public function __construct(string $host, string $downloadDirAbsPath, string $profileDirAbsPath)
+    public function __construct(string $host, ?string $downloadDirAbsPath, string $profileDirAbsPath)
     {
         $this->host = $host;
         $this->downloadDirAbsPath = $downloadDirAbsPath;

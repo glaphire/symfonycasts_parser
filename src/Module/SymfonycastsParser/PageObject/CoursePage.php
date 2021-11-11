@@ -2,10 +2,12 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
+use App\Module\SymfonycastsParser\Service\ParserService;
 use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 
 class CoursePage extends AbstractPageObject
 {
+    private const SFCASTS_BASE_URL = 'https://symfonycasts.com';
     private const SLCTR_COURSE_HEADER_NAME = 'h1';
     private const SLCTR_LESSON_NAME = 'ul.chapter-list a';
 
@@ -38,7 +40,7 @@ class CoursePage extends AbstractPageObject
         $lessonElements = $this->getLessons();
 
         foreach ($lessonElements as $lessonElement) {
-            $lessonPageUrls[] = $lessonElement->getAttribute('href');
+            $lessonPageUrls[] = self::SFCASTS_BASE_URL . $lessonElement->getAttribute('href');
         }
 
         return $lessonPageUrls;

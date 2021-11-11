@@ -14,12 +14,12 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
      * @var RemoteWebDriver|WebDriver $webdriver
      */
     private $webdriver;
-    private string $downloadDirectoryAbsPath;
+    private ?string $downloadDirectoryAbsPath = null;
 
     private const DOWNLOADING_RETRY_SECONDS = 5;
     private const CHROME_UNFINISHED_FILES_PATTERN = '*.crdownload';
 
-    public function __construct(ChromeWebdriverFactory $webdriverFactory, string $downloadDirAbsPath)
+    public function __construct(ChromeWebdriverFactory $webdriverFactory, ?string $downloadDirAbsPath)
     {
         $this->webdriver = $webdriverFactory->create();
         $this->downloadDirectoryAbsPath = $downloadDirAbsPath;
@@ -59,6 +59,7 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     public function openUrl(string $url)
     {
         $this->webdriver = $this->webdriver->get($url);
+        var_dump($url);
 
         return $this->webdriver;
     }
