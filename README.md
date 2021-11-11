@@ -2,6 +2,8 @@
 Application automated video downloading from www.symfonycasts.com
 
 ## Setup
+Current Chromedriver version in the project is 95.0.4638.69.
+
 Download version of Chromedriver compatible with your local Chrome Browser
 
    https://chromedriver.chromium.org/downloads
