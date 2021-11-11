@@ -2,7 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
+use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
 class LoginPage extends AbstractPageObject

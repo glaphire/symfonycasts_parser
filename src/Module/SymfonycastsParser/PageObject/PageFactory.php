@@ -3,7 +3,7 @@
 namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
-use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
+use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 
 class PageFactory
 {

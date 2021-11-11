@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
+use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;

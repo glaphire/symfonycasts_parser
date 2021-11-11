@@ -7,7 +7,7 @@ use App\Module\SymfonycastsParser\PageObject\LessonPage;
 use App\Module\SymfonycastsParser\PageObject\LoginPage;
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
 use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
-use App\Module\SymfonycastsParser\WebdriverFacade\WebdriverFacadeInterface;
+use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -39,7 +39,7 @@ class ParserService
         $this->filesystem->mkdir($this->temporaryDownloadDirPath);
     }
 
-    public function parseCoursePage(string $courseUrl, int $startLessonNumber = 1): void
+    public function parseCoursePage(string $courseUrl, int $startLessonNumber = 1): bool
     {
         $this->validateCourseUrl($courseUrl);
         $this->validateLessonNumber($startLessonNumber);
