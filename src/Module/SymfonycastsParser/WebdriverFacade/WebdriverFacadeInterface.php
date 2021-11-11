@@ -2,6 +2,7 @@
 
 namespace App\Module\SymfonycastsParser\WebdriverFacade;
 
+use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriver;
 use Facebook\WebDriver\WebDriverElement;
 
@@ -13,7 +14,10 @@ interface WebdriverFacadeInterface
 
     public function waitAndClick(string $cssSelector): void;
 
-    public function openUrl(string $url): WebDriver;
+    /**
+     * @return RemoteWebDriver|WebDriver
+     */
+    public function openUrl(string $url);
 
     public function findOne(string $cssSelector): WebDriverElement;
 
@@ -25,6 +29,8 @@ interface WebdriverFacadeInterface
     public function fillInput(string $cssSelector, string $text): void;
 
     public function waitFilesToDownload(): void;
+
+    public function getDownloadDirectoryAbsPath(): string;
 
     public function quit(): void;
 }

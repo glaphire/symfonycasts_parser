@@ -5,13 +5,17 @@ namespace App\Module\SymfonycastsParser\WebdriverFacade;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverElement;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 
 class ChromeWebdriverFacade implements WebdriverFacadeInterface
 {
-    private RemoteWebDriver $webdriver;
+    /**
+     * @var RemoteWebDriver|WebDriver $webdriver
+     */
+    private $webdriver;
     private string $downloadDirectoryAbsPath;
 
     private const DOWNLOADING_RETRY_SECONDS = 5;
@@ -49,7 +53,11 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         $this->click($cssSelector);
     }
 
-    public function openUrl(string $url): self
+    /**
+     * @param string $url
+     * @return RemoteWebDriver|WebDriver
+     */
+    public function openUrl(string $url)
     {
         $this->webdriver = $this->webdriver->get($url);
 
@@ -129,10 +137,9 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         ]);
 
         $caps = DesiredCapabilities::chrome();
+
         //ChromeOptions::CAPABILITY is deprecated, but without it it's impossible to set capabities
         $caps->setCapability(ChromeOptions::CAPABILITY, $options);
         $this->webdriver = RemoteWebDriver::create($host, $caps);
-
-        return $this->webdriver;
     }
 }
