@@ -45,6 +45,7 @@ class ChromeWebdriverFactory
 
         //ChromeOptions::CAPABILITY is deprecated, but without it it's impossible to set capabities
         $caps->setCapability(ChromeOptions::CAPABILITY, $options);
+
         return RemoteWebDriver::create($this->host, $caps);
     }
 }

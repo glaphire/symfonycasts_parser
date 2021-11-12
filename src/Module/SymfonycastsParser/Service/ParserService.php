@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\Service;
 
@@ -62,13 +64,13 @@ class ParserService
         $lessonsAmount = count($lessonPageUrls);
 
         if ($lessonsAmount < 1) {
-            throw new ProcessingException("There are no lessons to parse");
+            throw new ProcessingException('There are no lessons to parse');
         }
 
         for ($lessonNumber = $startLessonNumber; $lessonNumber <= $lessonsAmount; $lessonNumber++) {
             $index = $lessonNumber - 1;
 
-            /** @var LessonPage $lessonPage */
+            /* @var LessonPage $lessonPage */
             $lessonPage->openPage($lessonPageUrls[$index]);
 
             if (1 == $lessonNumber) {
@@ -105,11 +107,8 @@ class ParserService
     private function validateCourseUrl(string $courseUrl): bool
     {
         if (0 !== strpos($courseUrl, self::SFCASTS_COURSE_BASE_URL)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Course url should start from %s',
-                    self::SFCASTS_COURSE_BASE_URL
-                )
+            throw new InvalidArgumentException(sprintf(
+                'Course url should start from %s', self::SFCASTS_COURSE_BASE_URL)
             );
         }
 

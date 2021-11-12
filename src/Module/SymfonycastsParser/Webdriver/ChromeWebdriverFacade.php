@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\Webdriver;
 
@@ -11,7 +13,7 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class ChromeWebdriverFacade implements WebdriverFacadeInterface
 {
     /**
-     * @var RemoteWebDriver|WebDriver $webdriver
+     * @var RemoteWebDriver|WebDriver
      */
     private $webdriver;
     private string $downloadDirectoryAbsPath;
@@ -53,7 +55,6 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     }
 
     /**
-     * @param string $url
      * @return RemoteWebDriver|WebDriver
      */
     public function openUrl(string $url)
@@ -67,7 +68,8 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     {
         return $this
             ->webdriver
-            ->findElement(WebDriverBy::cssSelector($cssSelector));
+            ->findElement(WebDriverBy::cssSelector($cssSelector))
+        ;
     }
 
     /**
@@ -77,7 +79,8 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
     {
         return $this
             ->webdriver
-            ->findElements(WebDriverBy::cssSelector($cssSelector));
+            ->findElements(WebDriverBy::cssSelector($cssSelector))
+        ;
     }
 
     public function fillInput(string $cssSelector, string $text): void
@@ -86,7 +89,8 @@ class ChromeWebdriverFacade implements WebdriverFacadeInterface
         $this
             ->webdriver
             ->getKeyboard()
-            ->sendKeys($text);
+            ->sendKeys($text)
+        ;
     }
 
     /**

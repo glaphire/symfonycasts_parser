@@ -21,7 +21,8 @@ class CoursePage extends AbstractPageObject
         return $this
             ->webdriver
             ->findOne(self::CSS_COURSE_HEADER_NAME)
-            ->getText();
+            ->getText()
+        ;
     }
 
     /**
@@ -31,7 +32,8 @@ class CoursePage extends AbstractPageObject
     {
         return $this
             ->webdriver
-            ->findAll(self::CSS_LESSON_NAME);
+            ->findAll(self::CSS_LESSON_NAME)
+        ;
     }
 
     /**
@@ -43,7 +45,7 @@ class CoursePage extends AbstractPageObject
         $lessonElements = $this->getLessons();
 
         foreach ($lessonElements as $lessonElement) {
-            $lessonPageUrls[] = self::SFCASTS_BASE_URL . $lessonElement->getAttribute('href');
+            $lessonPageUrls[] = self::SFCASTS_BASE_URL.$lessonElement->getAttribute('href');
         }
 
         return $lessonPageUrls;
