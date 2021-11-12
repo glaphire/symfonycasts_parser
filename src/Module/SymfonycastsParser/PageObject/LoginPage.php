@@ -7,13 +7,12 @@ use Facebook\WebDriver\Exception\NoSuchElementException;
 
 class LoginPage extends AbstractPageObject
 {
-    //SLTCR means SELECTOR
-    private const SLCTR_FORM_INPUT_LOGIN = '#email';
-    private const SLCTR_FORM_INPUT_PASSWORD = '#password';
-    private const SLCTR_FORM_SUBMIT_BUTTON = '#_submit';
+    private const CSS_FORM_INPUT_LOGIN = '#email';
+    private const CSS_FORM_INPUT_PASSWORD = '#password';
+    private const CSS_FORM_SUBMIT_BUTTON = '.btn.btn-sm.btn-primary.text-center';
 
-    private const SLCTR_HEADER_NAVBAR = '.navbar';
-    private const SLCTR_HEADER_ACCOUNT_MENU = 'a[title*="Account Menu"]';
+    private const CSS_HEADER_NAVBAR = '.navbar.nav-sfcasts-profile';
+    private const CSS_HEADER_ACCOUNT_MENU = 'a[title*="Account Menu"]';
 
     private string $login;
     private string $password;
@@ -25,20 +24,20 @@ class LoginPage extends AbstractPageObject
         $this->webdriver = $webdriver;
     }
 
-    public function login()
+    public function login(): void
     {
         if (!$this->isAuthorized()) {
-            $this->webdriver->fillInput(self::SLCTR_FORM_INPUT_LOGIN, $this->login);
-            $this->webdriver->fillInput(self::SLCTR_FORM_INPUT_PASSWORD, $this->password);
-            $this->webdriver->click(self::SLCTR_FORM_SUBMIT_BUTTON);
+            $this->webdriver->fillInput(self::CSS_FORM_INPUT_LOGIN, $this->login);
+            $this->webdriver->fillInput(self::CSS_FORM_INPUT_PASSWORD, $this->password);
+            $this->webdriver->click(self::CSS_FORM_SUBMIT_BUTTON);
         }
     }
 
-    private function isAuthorized()
+    private function isAuthorized(): bool
     {
         try {
-            $this->webdriver->waitToBeClickable(self::SLCTR_HEADER_NAVBAR);
-            $this->webdriver->findOne(self::SLCTR_HEADER_ACCOUNT_MENU);
+            $this->webdriver->waitToBeClickable(self::CSS_HEADER_NAVBAR);
+            $this->webdriver->findOne(self::CSS_HEADER_ACCOUNT_MENU);
 
             return true;
         } catch (NoSuchElementException $e) {

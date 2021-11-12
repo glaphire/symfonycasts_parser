@@ -7,9 +7,9 @@ use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 
 class PageFactory
 {
-    private const TYPE_LOGIN = 'login';
-    private const TYPE_COURSE = 'course';
-    private const TYPE_LESSON = 'lesson';
+    public const TYPE_LOGIN = 'login';
+    public const TYPE_COURSE = 'course';
+    public const TYPE_LESSON = 'lesson';
 
     private WebdriverFacadeInterface $webdriver;
     private string $login;

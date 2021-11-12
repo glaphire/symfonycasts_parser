@@ -16,7 +16,7 @@ class ParserService
     private const SFCASTS_COURSE_BASE_URL = 'https://symfonycasts.com/screencast';
     private const SFCASTS_LOGIN_URL = 'https://symfonycasts.com/login';
 
-    private const REGEX_FILENAME_EXCEPT_PATTERN = '/[^a-z\d ]+/';
+    private const REGEX_FILENAME_EXCLUSION_PATTERN = '/[^a-z\d ]+/';
 
     private $filesystem;
     private $webdriver;
@@ -47,17 +47,17 @@ class ParserService
         $this->validateLessonNumber($startLessonNumber);
 
         /** @var LoginPage $loginPage */
-        $loginPage = $this->pageFactory->create('login');
+        $loginPage = $this->pageFactory->create(PageFactory::TYPE_LOGIN);
         $loginPage->openPage(self::SFCASTS_LOGIN_URL);
         $loginPage->login();
 
         /** @var CoursePage $coursePage */
-        $coursePage = $this->pageFactory->create('course');
+        $coursePage = $this->pageFactory->create(PageFactory::TYPE_COURSE);
         $coursePage->openPage($courseUrl);
         $courseTitleText = $coursePage->getCourseName();
         $lessonPageUrls = $coursePage->getLessonsUrls();
 
-        $lessonPage = $this->pageFactory->create('lesson');
+        $lessonPage = $this->pageFactory->create(PageFactory::TYPE_LESSON);
 
         $lessonsAmount = count($lessonPageUrls);
 
@@ -97,13 +97,20 @@ class ParserService
             throw new ProcessingException('Name for a file cannot be empty');
         }
 
-        return str_replace(' ', '_', preg_replace(self::REGEX_FILENAME_EXCEPT_PATTERN, '', strtolower($name)));
+        $cleanedName = preg_replace(self::REGEX_FILENAME_EXCLUSION_PATTERN, '', strtolower($name));
+
+        return str_replace(' ', '_', $cleanedName);
     }
 
     private function validateCourseUrl(string $courseUrl): bool
     {
         if (0 !== strpos($courseUrl, self::SFCASTS_COURSE_BASE_URL)) {
-            throw new InvalidArgumentException('Course url should starts from '.self::SFCASTS_COURSE_BASE_URL);
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Course url should start from %s',
+                    self::SFCASTS_COURSE_BASE_URL
+                )
+            );
         }
 
         return true;
@@ -112,7 +119,7 @@ class ParserService
     private function validateLessonNumber(int $lessonNumber): bool
     {
         if ($lessonNumber < 1) {
-            throw new InvalidArgumentException('Lesson number should be less or equal 1');
+            throw new InvalidArgumentException('Lesson\'s number should be greater or equal 1');
         }
 
         return true;
