@@ -34,7 +34,7 @@ class PageFactory
     /**
      * @throws ProcessingException
      */
-    public function create(string $pageType): PageInterface
+    public function create(string $pageType): AbstractPageObject
     {
         switch ($pageType) {
             case self::TYPE_LOGIN:

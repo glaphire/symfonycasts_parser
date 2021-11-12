@@ -4,7 +4,7 @@ namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 
-abstract class AbstractPageObject implements PageInterface
+abstract class AbstractPageObject
 {
     protected WebdriverFacadeInterface $webdriver;
 
