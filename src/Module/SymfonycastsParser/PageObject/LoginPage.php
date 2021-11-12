@@ -26,11 +26,13 @@ class LoginPage extends AbstractPageObject
 
     public function login(): void
     {
-        if (!$this->isAuthorized()) {
-            $this->webdriver->fillInput(self::CSS_FORM_INPUT_LOGIN, $this->login);
-            $this->webdriver->fillInput(self::CSS_FORM_INPUT_PASSWORD, $this->password);
-            $this->webdriver->click(self::CSS_FORM_SUBMIT_BUTTON);
+        if ($this->isAuthorized()) {
+            return;
         }
+
+        $this->webdriver->fillInput(self::CSS_FORM_INPUT_LOGIN, $this->login);
+        $this->webdriver->fillInput(self::CSS_FORM_INPUT_PASSWORD, $this->password);
+        $this->webdriver->click(self::CSS_FORM_SUBMIT_BUTTON);
     }
 
     private function isAuthorized(): bool
