@@ -8,7 +8,7 @@ use App\Module\SymfonycastsParser\PageObject\CoursePage;
 use App\Module\SymfonycastsParser\PageObject\LessonPage;
 use App\Module\SymfonycastsParser\PageObject\LoginPage;
 use App\Module\SymfonycastsParser\PageObject\PageFactory;
-use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
+use App\Module\SymfonycastsParser\Service\Exception\ProcessingException;
 use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;

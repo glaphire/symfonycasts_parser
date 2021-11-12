@@ -20,7 +20,7 @@ class ConsoleErrorSubscriber implements EventSubscriberInterface
         $this->webdriverFacade = $webdriverFacade;
     }
 
-    public function onErrorHandler(ConsoleErrorEvent $event)
+    public function onErrorHandler(ConsoleErrorEvent $event): void
     {
         $error = $event->getError();
         $errorLogMessage = sprintf('Unexpected error occured with message: %s', $error->getMessage());
@@ -29,7 +29,7 @@ class ConsoleErrorSubscriber implements EventSubscriberInterface
         $this->webdriverFacade->quit();
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ConsoleEvents::ERROR => 'OnErrorHandler',

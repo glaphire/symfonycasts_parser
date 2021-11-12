@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Module\SymfonycastsParser\Service\ParserService;
@@ -13,9 +15,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ParseCourse extends Command
 {
-    protected ParserService $parserService;
+    private const RESULT_SUCCESS = 0;
+    private const RESULT_FAILURE = 1;
 
-    protected LoggerInterface $logger;
+    private ParserService $parserService;
+    private LoggerInterface $logger;
 
     protected static $defaultName = 'app:parse-course';
 
@@ -27,7 +31,7 @@ class ParseCourse extends Command
         parent::__construct(self::$defaultName);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addArgument('course_url', InputArgument::REQUIRED, 'URL of course video list')
@@ -37,27 +41,36 @@ class ParseCourse extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $courseUrl = $input->getArgument('course_url');
         $startLessonNumber = $input->getArgument('start_lesson_number') ?? 1;
 
         try {
             $this->validateLessonNumberType($startLessonNumber);
-            $this->parserService->parseCoursePage($courseUrl, $startLessonNumber);
+            $this->parserService->parseCoursePage($courseUrl, (int)$startLessonNumber);
         } catch (Exception $e) {
             $this->logger->error($e);
             $this->parserService->shutdownDownloadingProcess();
-            $terminationMessage = sprintf('Downloading process terminated due to exception: %s', $e->getMessage());
+            $terminationMessage = sprintf(
+                'Downloading process terminated due to exception: %s',
+                $e->getMessage()
+            );
             $output->writeln("<error>{$terminationMessage}</error>");
+
+            return self::RESULT_FAILURE;
         }
 
-        return 0;
+        return self::RESULT_SUCCESS;
     }
 
-    private function validateLessonNumberType($startLessonNumber)
+    /**
+     * ad-hoc validation, because we can't convert argument
+     * to int on-the-fly without loosing context about it's value
+     */
+    private function validateLessonNumberType(string $startLessonNumber): bool
     {
-        if ((int) $startLessonNumber != $startLessonNumber) {
+        if (!is_numeric($startLessonNumber)) {
             throw new InvalidArgumentException('Lesson number should be an integer');
         }
 

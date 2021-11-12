@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\SymfonycastsParser\PageObject;
 
-use App\Module\SymfonycastsParser\Service\Exceptions\ProcessingException;
+use App\Module\SymfonycastsParser\Service\Exception\ProcessingException;
 use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
 
 class PageFactory

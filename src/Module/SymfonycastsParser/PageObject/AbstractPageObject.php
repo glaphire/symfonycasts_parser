@@ -10,7 +10,7 @@ abstract class AbstractPageObject
 {
     protected WebdriverFacadeInterface $webdriver;
 
-    public function openPage(string $url)
+    public function openPage(string $url): void
     {
         $this->webdriver->openUrl($url);
     }
