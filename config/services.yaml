@@ -35,8 +35,7 @@ services:
     App\Module\SymfonycastsParser\PageObject\PageFactory:
         arguments:
             $webdriver: '@App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface'
-            $login: '%smfCastsLogin%'
-            $password: '%smfCastsPassword%'
+            $parameterBag: '@Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'
 
     App\Module\SymfonycastsParser\Webdriver\ChromeWebdriverFactory:
         arguments:

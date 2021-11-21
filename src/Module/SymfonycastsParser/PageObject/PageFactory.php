@@ -6,6 +6,7 @@ namespace App\Module\SymfonycastsParser\PageObject;
 
 use App\Module\SymfonycastsParser\Service\Exception\ProcessingException;
 use App\Module\SymfonycastsParser\Webdriver\WebdriverFacadeInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PageFactory
 {
@@ -14,14 +15,15 @@ class PageFactory
     public const TYPE_LESSON = 'lesson';
 
     private WebdriverFacadeInterface $webdriver;
-    private string $login;
-    private string $password;
+    /**
+     * @var ParameterBagInterface
+     */
+    private $parameterBag;
 
-    public function __construct(WebdriverFacadeInterface $webdriver, string $login, string $password)
+    public function __construct(WebdriverFacadeInterface $webdriver, ParameterBagInterface $parameterBag)
     {
         $this->webdriver = $webdriver;
-        $this->login = $login;
-        $this->password = $password;
+        $this->parameterBag = $parameterBag;
     }
 
     private function allowedTypes(): array
@@ -40,7 +42,11 @@ class PageFactory
     {
         switch ($pageType) {
             case self::TYPE_LOGIN:
-                $page = new LoginPage($this->webdriver, $this->login, $this->password);
+                $page = new LoginPage(
+                    $this->webdriver,
+                    $this->parameterBag->get('smfCastsLogin'),
+                    $this->parameterBag->get('smfCastsPassword')
+                );
 
                 break;
             case self::TYPE_COURSE:
