@@ -45,9 +45,24 @@ class CoursePage extends AbstractPageObject
         $lessonElements = $this->getLessons();
 
         foreach ($lessonElements as $lessonElement) {
-            $lessonPageUrls[] = self::SFCASTS_BASE_URL.$lessonElement->getAttribute('href');
+            $lessonUrl = self::SFCASTS_BASE_URL.$lessonElement->getAttribute('href');
+
+            if ($this->isLinkAChallenge($lessonUrl) === true) {
+                continue;
+            }
+
+            $lessonPageUrls[] = $lessonUrl;
         }
 
         return $lessonPageUrls;
+    }
+
+    private function isLinkAChallenge(string $url): bool
+    {
+        if (strpos($url, '/activity/') !== false ) {
+            return true;
+        }
+
+        return false;
     }
 }

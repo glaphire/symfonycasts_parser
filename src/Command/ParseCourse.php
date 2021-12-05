@@ -49,7 +49,7 @@ class ParseCourse extends Command
         try {
             $this->validateLessonNumberType($startLessonNumber);
             $this->parserService->parseCoursePage($courseUrl, (int)$startLessonNumber);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error($e);
             $this->parserService->shutdownDownloadingProcess();
             $terminationMessage = sprintf(
@@ -68,7 +68,7 @@ class ParseCourse extends Command
      * ad-hoc validation, because we can't convert argument
      * to int on-the-fly without loosing context about it's value
      */
-    private function validateLessonNumberType(string $startLessonNumber): bool
+    private function validateLessonNumberType(int $startLessonNumber): bool
     {
         if (!is_numeric($startLessonNumber)) {
             throw new InvalidArgumentException('Lesson number should be an integer');
